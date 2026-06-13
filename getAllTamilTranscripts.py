@@ -13,8 +13,9 @@ processed_video_ids = set()
 with open("./tamil_transcripts.jsonl", "r", encoding="utf-8") as jsonl_file:
     for line in jsonl_file:
         data = json.loads(line)
-        video_id = list(data.keys())
+        video_id = list(data.keys())[0]
         processed_video_ids.add(video_id)
+
 print(f"Found {len(processed_video_ids)} already processed video ids")
 
 unprocessed_video_ids = [vid for vid in video_ids if vid not in processed_video_ids]
@@ -24,7 +25,9 @@ print(
 )
 
 ytt_api = YouTubeTranscriptApi()
-for video_id in tqdm(video_ids, desc="Processing transcripts", unit="video"):
+for video_id in tqdm(
+    unprocessed_video_ids, desc="Processing transcripts", unit="video"
+):
     transcript_list = ytt_api.list(video_id)
     transcript = transcript_list.find_generated_transcript(["ta"])
     raw_transcript_data = transcript.fetch()
@@ -37,7 +40,7 @@ for video_id in tqdm(video_ids, desc="Processing transcripts", unit="video"):
     with open("tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
         json.dump(serializable_data, f, ensure_ascii=False)
         f.write("\n")
-    time.sleep(1.2)
+    time.sleep(5)
 
 end = time.perf_counter()
 elapsed_time = end - start

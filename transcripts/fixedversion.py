@@ -11,7 +11,8 @@ start = time.perf_counter()
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 OUTPUT_DIR = SCRIPT_DIR / "output"
-PROXY_FILE_PATH = PROJECT_ROOT / "proxies" / "output" / "working_free_http_proxies.txt"
+PROXY_FILE_DIR = PROJECT_ROOT / "proxies" / "output"
+PROXY_FILE_PATH = PROXY_FILE_DIR / "working_free_http_proxies.txt"
 
 
 def load_proxies(file_path):
@@ -107,6 +108,8 @@ for video_id in tqdm(
 
         count += 1
         tqdm.write(f"Success with proxy - {current_proxy} | success_count - {count}")
+        with open(PROXY_FILE_DIR / "success_proxies.txt", "a", encoding="utf-8") as f:
+            f.write(current_proxy + "\n")
         time.sleep(5)
 
     except Exception as e:

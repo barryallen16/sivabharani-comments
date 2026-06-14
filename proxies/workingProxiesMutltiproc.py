@@ -70,7 +70,21 @@ def check_single_proxy(proxy_url):
         if hasattr(ytt_api, "_http_client"):
             ytt_api._http_client.timeout = 3.0  # Keep it short!
 
-        ytt_api.list(video_id)
+        transcript_list = ytt_api.list(video_id)
+        transcript = transcript_list.find_generated_transcript(["ta"])
+        raw_transcript_data = transcript.fetch()
+
+        serializable_data = {
+            video_id: [
+                {
+                    "text": chunk.text,
+                    "start": chunk.start,
+                    "duration": chunk.duration,
+                }
+                for chunk in raw_transcript_data
+            ]
+        }
+
         return proxy_url, True
     except Exception:
         return proxy_url, False

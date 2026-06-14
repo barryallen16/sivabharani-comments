@@ -40,7 +40,7 @@ for video_id in tqdm(
     with open("tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
         json.dump(serializable_data, f, ensure_ascii=False)
         f.write("\n")
-    time.sleep(5)
+    time.sleep(10)
 
 end = time.perf_counter()
 elapsed_time = end - start

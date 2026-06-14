@@ -1,0 +1,2 @@
+- The `./output/transcripts_report.json` has data about the count of all available transcripts for sivabharani videos and also the video_ids corresponding to each transcript language. 
+- `./input/video_ids.txt` contains all the 2755 video_ids of all the pubicly available videos sivabharani has posted excluding shorts, live. shorts and live videos are ok being excluded as , shorts are just cut from the main video and linked to the main video. live are not much useful for the scope of this project.

@@ -3,9 +3,16 @@ import json
 from tqdm import tqdm
 import time
 
+"""
+after inspecting the `./output/transcripts_report.json` file and manually checking the video transcript for accuracy, 
+i chose to first extract all the tamil transcripts first and write the transcript result to a jsonl file 
+`./output/tamil_transcripts.jsonl`. the below code proceeds to do that. but after a few request ip ban occurs
+so i created `./getAllTamilTranscriptsWithProxy.py`
+"""
+
 start = time.perf_counter()
 
-with open("./transcripts_report.json", "r", encoding="utf-8") as in_file:
+with open("./output/transcripts_report.json", "r", encoding="utf-8") as in_file:
     json_data = json.load(in_file)
     video_ids = json_data["ta"]["video_ids"]
 
@@ -37,7 +44,7 @@ for video_id in tqdm(
             for chunk in raw_transcript_data
         ]
     }
-    with open("tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
+    with open("./output/tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
         json.dump(serializable_data, f, ensure_ascii=False)
         f.write("\n")
     time.sleep(10)

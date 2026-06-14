@@ -4,10 +4,11 @@ import os
 from tqdm import tqdm
 from pathlib import Path
 
-output_dir = "proxies"
-os.makedirs(exist_ok=True, name=output_dir)
-
-with open("./results-http.txt", "r", encoding="utf-8") as in_file:
+"""
+filter the proxies that work for yt api in normal sequencial manner
+"""
+output_dir = "output"
+with open("./input/results-http.txt", "r", encoding="utf-8") as in_file:
     PROXY_LIST = [f"http://{line.strip()}" for line in in_file if line.strip()]
 
 video_id = "qyEEVWy6FZ8"

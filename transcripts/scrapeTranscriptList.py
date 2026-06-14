@@ -1,8 +1,13 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 import json
 
+"""
+This code iterates through all the 2755 video_ids and extracts its corresponding transcript
+list (list that shows the available language transcripts) and write a json file containing the 
+transcript language count and its corresponding video_ids to   `./output/transcripts_report.json`
+"""
 video_ids = []
-with open("./video_ids.txt", "r") as in_file:
+with open("./input/video_ids.txt", "r") as in_file:
     for line in in_file:
         video_ids.append(line.strip())
 
@@ -22,5 +27,5 @@ for video_id in video_ids:
         continue
 
 print(generated_languages)
-with open('./transcripts_report.json', 'w', encoding='utf-8') as out_file:
+with open("./output/transcripts_report.json", "w", encoding="utf-8") as out_file:
     out_file.write(json.dumps(generated_languages))

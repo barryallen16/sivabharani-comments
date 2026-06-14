@@ -6,11 +6,14 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.proxies import GenericProxyConfig
 
+"""
+filters working proxies for yt api in multiprocessing manner
+"""
 # Proper Path setup
-output_dir = Path("proxies")
+output_dir = Path("output")
 output_dir.mkdir(parents=True, exist_ok=True)
 
-proxy_file_path = "./proxies/results-http.txt"
+proxy_file_path = "./input/results-http.txt"
 # Clean load
 with open(
     "./proxies/not_working_free_http_proxies.txt", "r", encoding="utf-8"

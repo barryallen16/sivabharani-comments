@@ -5,7 +5,15 @@ import random
 from tqdm import tqdm
 import time
 
+"""
+this code uses proxies to extract the transcript and write results to `./output/tamil_transcripts.jsonl`
+proxies are checked using `./workingProxiesMutltiproc.py` and segregated into working and not working proxies
+this helps in not processing the already processed ip.
+we choose proxies by random and if they are not working we remove them from the list during execution.
+"""
 start = time.perf_counter()
+
+proxy_file_path = "../proxies/output/working_free_http_proxies.txt"
 
 
 def load_proxies(file_path):
@@ -18,7 +26,7 @@ def load_proxies(file_path):
         return proxy_list
 
 
-PROXY_LIST = load_proxies("./results-http.txt")
+PROXY_LIST = load_proxies(proxy_file_path)
 
 with open("./transcripts_report.json", "r", encoding="utf-8") as in_file:
     json_data = json.load(in_file)
@@ -65,7 +73,7 @@ for video_id in tqdm(
                 ]
             }
 
-            with open("tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
+            with open("./output/tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
                 json.dump(serializable_data, f, ensure_ascii=False)
                 f.write("\n")
             count += 1

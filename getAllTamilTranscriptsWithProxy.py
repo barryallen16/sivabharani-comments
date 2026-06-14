@@ -38,7 +38,7 @@ unprocessed_video_ids = [vid for vid in video_ids if vid not in processed_video_
 print(
     f"Loaded {len(unprocessed_video_ids)} video ids to be processed from {len(video_ids)}."
 )
-
+count = 0
 for video_id in tqdm(
     unprocessed_video_ids, desc="Processing transcripts", unit="video"
 ):
@@ -64,12 +64,15 @@ for video_id in tqdm(
                     for chunk in raw_transcript_data
                 ]
             }
+
             with open("tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
                 json.dump(serializable_data, f, ensure_ascii=False)
                 f.write("\n")
+            count += 1
+            tqdm.write(f"success with proxy - {current_proxy}. success_count - {count}")
             time.sleep(5)
         except Exception as e:
-            tqdm.write(f"error occured with proxy - {current_proxy}")
+            # tqdm.write(f"error occured with proxy - {current_proxy}")
             if "Connection" in str(e) or "429" in str(e):
                 tqdm.write("Found dead proxy. removing from proxy list..")
                 PROXY_LIST.remove(current_proxy)

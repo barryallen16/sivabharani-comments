@@ -1,5 +1,8 @@
 ### SBUS comments
-[SBUS](https://www.youtube.com/@Sivabharani) is a youtube tech enthusiast. He read and reply comments(mostly asking guidance or a detailed review of the product they have been using) of his subscribers and members of the channel in videos but as there are almost more than 2000+ videos uploaded in the channel, and would increase day by day. It became impossible to find when and where SBUS has replied to the comment/query/guidance asked by the user. This project aims to solve this problem.
+SBUS is a tamil tech enthusiast youtuber. He read and reply comments(mostly asking guidance or a detailed review of the product they have been using) of his subscribers and members of the channel in videos but as there are almost more than 2000+ videos uploaded in the channel, and would increase day by day. It became impossible to find when and where SBUS has replied to the comment/query/guidance asked by the user. This project aims to solve this problem. Channel Link - [link](https://www.youtube.com/@Sivabharani)
+
+
+![image](misc/sbus.png)
 
 - There are auto generated transcript for each video, so i will scrape all the available transcripts 
 - and do processing to segregrate timestraps of each video where he says a person name. 

@@ -9,18 +9,36 @@ from youtube_transcript_api.proxies import GenericProxyConfig
 """
 filters working proxies for yt api in multiprocessing manner
 """
-# Proper Path setup
-output_dir = Path("output")
-output_dir.mkdir(parents=True, exist_ok=True)
 
-proxy_file_path = "./input/results-http.txt"
-# Clean load
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+OUTPUT_DIR = SCRIPT_DIR / "output"
+START_FRESH = True
+proxy_file_path = SCRIPT_DIR / "input" / "all_free_proxy_list.txt"
+
+if START_FRESH:
+    with (
+        open(
+            OUTPUT_DIR / "not_working_free_http_proxies.txt",
+            "w",
+            encoding="utf-8",
+        ) as f1,
+        open(
+            OUTPUT_DIR / "working_free_http_proxies.txt",
+            "w",
+            encoding="utf-8",
+        ) as f2,
+    ):
+        pass
+
 with open(
-    "./proxies/not_working_free_http_proxies.txt", "r", encoding="utf-8"
+    OUTPUT_DIR / "not_working_free_http_proxies.txt", "r", encoding="utf-8"
 ) as in_file:
     not_working_proxies = {line.strip() for line in in_file if line.strip()}
 
-with open("./proxies/working_free_http_proxies.txt", "r", encoding="utf-8") as in_file:
+with open(
+    OUTPUT_DIR / "working_free_http_proxies.txt", "r", encoding="utf-8"
+) as in_file:
     working_proxies = {line.strip() for line in in_file if line.strip()}
 
 already_processed_proxies = not_working_proxies.union(working_proxies)
@@ -42,7 +60,7 @@ print(
     f"Found {len(CLEAN_PROXY_LIST)} unprocessed proxies.",
 )
 
-video_id = "qyEEVWy6FZ8"
+video_id = "Lv9hAnOGjao"
 
 
 # Define the individual worker function
@@ -84,13 +102,15 @@ if len(CLEAN_PROXY_LIST) > 0:
             proxy, is_working = future.result()
             if is_working:
                 with open(
-                    output_dir / "working_free_http_proxies.txt", "a", encoding="utf-8"
+                    OUTPUT_DIR / "working_free_http_proxies.txt",
+                    "a",
+                    encoding="utf-8",
                 ) as out_file:
                     out_file.write(proxy + "\n")
                 working_proxies.add(proxy)
             else:
                 with open(
-                    output_dir / "not_working_free_http_proxies.txt",
+                    OUTPUT_DIR / "not_working_free_http_proxies.txt",
                     "a",
                     encoding="utf-8",
                 ) as out_file:

@@ -17,3 +17,4 @@ FREE_PROXY_LIST = get_free_proxy_list()
 with open("./input/free-proxy-list.txt", "w", encoding="utf-8") as out_file:
     for proxy in FREE_PROXY_LIST:
         out_file.write(proxy + "\n")
+

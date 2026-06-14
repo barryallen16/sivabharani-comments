@@ -4,6 +4,7 @@ import json
 import random
 from tqdm import tqdm
 import time
+from pathlib import Path
 
 """
 this code uses proxies to extract the transcript and write results to `./output/tamil_transcripts.jsonl`
@@ -13,27 +14,29 @@ we choose proxies by random and if they are not working we remove them from the 
 """
 start = time.perf_counter()
 
-proxy_file_path = "../proxies/output/working_free_http_proxies.txt"
-
 
 def load_proxies(file_path):
     with open(file_path, "r", encoding="utf-8") as proxies:
         proxy_list = [
             f"http://{proxy_line.strip()}"
             for proxy_line in proxies
-            if not proxy_line.strip().startswith("http://")
+            if proxy_line.strip()
         ]
         return proxy_list
 
 
-PROXY_LIST = load_proxies(proxy_file_path)
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parent
+PROXY_FILE_PATH = PROJECT_ROOT / "proxies" / "output" / "working_free_http_proxies.txt"
+OUTPUT_DIR = SCRIPT_DIR / "output"
+PROXY_LIST = load_proxies(PROXY_FILE_PATH)
 
-with open("./transcripts_report.json", "r", encoding="utf-8") as in_file:
+with open(OUTPUT_DIR / "transcripts_report.json", "r", encoding="utf-8") as in_file:
     json_data = json.load(in_file)
     video_ids = json_data["ta"]["video_ids"]
 
 processed_video_ids = set()
-with open("./tamil_transcripts.jsonl", "r", encoding="utf-8") as jsonl_file:
+with open(OUTPUT_DIR / "tamil_transcripts.jsonl", "r", encoding="utf-8") as jsonl_file:
     for line in jsonl_file:
         data = json.loads(line)
         video_id = list(data.keys())[0]
@@ -51,40 +54,40 @@ for video_id in tqdm(
     unprocessed_video_ids, desc="Processing transcripts", unit="video"
 ):
     current_proxy = None
-    if PROXY_LIST:
-        current_proxy = random.choice(PROXY_LIST)
-        proxy_config = GenericProxyConfig(
-            http_url=current_proxy, https_url=current_proxy
-        )
+    if not PROXY_LIST:
+        tqdm.write("proxy list is empty. stopping execution..")
+        break
+    current_proxy = random.choice(PROXY_LIST)
+    proxy_config = GenericProxyConfig(http_url=current_proxy, https_url=current_proxy)
 
-        ytt_api = YouTubeTranscriptApi(proxy_config=proxy_config)
-        try:
-            transcript_list = ytt_api.list(video_id)
-            transcript = transcript_list.find_generated_transcript(["ta"])
-            raw_transcript_data = transcript.fetch()
-            serializable_data = {
-                video_id: [
-                    {
-                        "text": chunk.text,
-                        "start": chunk.start,
-                        "duration": chunk.duration,
-                    }
-                    for chunk in raw_transcript_data
-                ]
-            }
+    ytt_api = YouTubeTranscriptApi(proxy_config=proxy_config)
+    try:
+        transcript_list = ytt_api.list(video_id)
+        transcript = transcript_list.find_generated_transcript(["ta"])
+        raw_transcript_data = transcript.fetch()
+        serializable_data = {
+            video_id: [
+                {
+                    "text": chunk.text,
+                    "start": chunk.start,
+                    "duration": chunk.duration,
+                }
+                for chunk in raw_transcript_data
+            ]
+        }
 
-            with open("./output/tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
-                json.dump(serializable_data, f, ensure_ascii=False)
-                f.write("\n")
-            count += 1
-            tqdm.write(f"success with proxy - {current_proxy}. success_count - {count}")
-            time.sleep(5)
-        except Exception as e:
-            # tqdm.write(f"error occured with proxy - {current_proxy}")
-            if "Connection" in str(e) or "429" in str(e):
-                tqdm.write("Found dead proxy. removing from proxy list..")
-                PROXY_LIST.remove(current_proxy)
-            continue
+        with open(OUTPUT_DIR / "tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
+            json.dump(serializable_data, f, ensure_ascii=False)
+            f.write("\n")
+        count += 1
+        tqdm.write(f"success with proxy - {current_proxy}. success_count - {count}")
+        time.sleep(5)
+    except Exception as e:
+        # tqdm.write(f"error occured with proxy - {current_proxy}")
+        if "Connection" in str(e) or "429" in str(e):
+            tqdm.write("Found dead proxy. removing from proxy list..")
+            PROXY_LIST.remove(current_proxy)
+        continue
 
 
 end = time.perf_counter()

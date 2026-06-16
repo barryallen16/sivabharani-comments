@@ -1,1 +1,2 @@
+*.jsonl filter=lfs diff=lfs merge=lfs -text
 transcripts/output/tamil_transcripts.jsonl filter=lfs diff=lfs merge=lfs -text

@@ -12,7 +12,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 OUTPUT_DIR = SCRIPT_DIR / "output"
 PROXY_FILE_DIR = PROJECT_ROOT / "proxies" / "output"
-PROXY_FILE_PATH = PROXY_FILE_DIR / "success_proxies.txt"
+PROXY_FILE_PATH = PROXY_FILE_DIR / "new_success_proxies.txt"
 
 success_proxies_set = set()
 

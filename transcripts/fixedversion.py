@@ -12,9 +12,13 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 OUTPUT_DIR = SCRIPT_DIR / "output"
 PROXY_FILE_DIR = PROJECT_ROOT / "proxies" / "output"
-PROXY_FILE_PATH = PROXY_FILE_DIR / "new_success_proxies.txt"
+PROXY_FILE_V1_PATH = PROXY_FILE_DIR / "success_proxies.txt"
+PROXY_FILE_V2_PATH = PROXY_FILE_DIR / "working_free_http_proxies.txt"
 
+LANGUAGE = "ko"
+OUTPUT_FILENAME = "korean_transcripts.jsonl"
 success_proxies_set = set()
+
 
 def load_proxies(file_path):
     proxy_list = []
@@ -30,23 +34,25 @@ def load_proxies(file_path):
                 proxy_list.append(line)
     except FileNotFoundError:
         print(f"Warning: Proxy file not found at {file_path}")
-    return proxy_list
+    return set(proxy_list)
 
 
-PROXY_LIST = load_proxies(PROXY_FILE_PATH)
+PROXY_LIST = load_proxies(PROXY_FILE_V1_PATH)
+if len(PROXY_LIST) > 0:
+    pass
+else: 
+    PROXY_LIST = load_proxies(PROXY_FILE_V2_PATH)
 print(f"Loaded {len(PROXY_LIST)} HTTP proxies for rotation.")
 
 
 with open(OUTPUT_DIR / "transcripts_report.json", "r", encoding="utf-8") as in_file:
     json_data = json.load(in_file)
-    video_ids = json_data["ta"]["video_ids"]
+    video_ids = json_data[LANGUAGE]["video_ids"]  # "ta" for tamil , LANGUAGE for korean
 
 processed_video_ids = set()
 # FIX: Wrap in try-except so a missing file doesn't break a fresh run
 try:
-    with open(
-        OUTPUT_DIR / "tamil_transcripts.jsonl", "r", encoding="utf-8"
-    ) as jsonl_file:
+    with open(OUTPUT_DIR / OUTPUT_FILENAME, "r", encoding="utf-8") as jsonl_file:
         for line in jsonl_file:
             if line.strip():
                 data = json.loads(line)
@@ -89,7 +95,7 @@ for video_id in tqdm(
 
     try:
         transcript_list = ytt_api.list(video_id)
-        transcript = transcript_list.find_generated_transcript(["ta"])
+        transcript = transcript_list.find_generated_transcript([LANGUAGE])
         raw_transcript_data = transcript.fetch()
 
         serializable_data = {
@@ -103,7 +109,7 @@ for video_id in tqdm(
             ]
         }
 
-        with open(OUTPUT_DIR / "tamil_transcripts.jsonl", "a", encoding="utf-8") as f:
+        with open(OUTPUT_DIR / OUTPUT_FILENAME, "a", encoding="utf-8") as f:
             json.dump(serializable_data, f, ensure_ascii=False)
             f.write("\n")
 
@@ -111,7 +117,9 @@ for video_id in tqdm(
         tqdm.write(f"Success with proxy - {current_proxy} | success_count - {count}")
         if current_proxy not in success_proxies_set:
             success_proxies_set.add(current_proxy)
-            with open(PROXY_FILE_DIR / "new_success_proxies.txt", "a", encoding="utf-8") as f:    
+            with open(
+                PROXY_FILE_DIR / "new_success_proxies.txt", "a", encoding="utf-8"
+            ) as f:
                 f.write(current_proxy + "\n")
         time.sleep(5)
 

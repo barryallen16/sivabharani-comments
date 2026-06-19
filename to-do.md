@@ -1,0 +1,2 @@
+- [] add a instruct in the prompt to classify the comment as question/query or review? so that we can use the json to filter accordingly
+- [] if the transcript doesn't have any comments, or name being read out. we just return None , ie blank json.

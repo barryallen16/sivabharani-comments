@@ -92,7 +92,7 @@ LOAD_SRC = [
     "    except Exception:\n",
     "        return True\n",
     "    return any(\"PER\" in e.get(\"entity_group\", \"\") for e in ents)\n",
-    "model, tokenizer = FastModel.from_pretrained(model_name=\"unsloth/gemma-4-E4B-it\", dtype=None, max_seq_length=1024, load_in_4bit=True, full_finetuning=False)\n",
+    "model, tokenizer = FastModel.from_pretrained(model_name=\"unsloth/gemma-3-4b-it\", dtype=None, max_seq_length=1024, load_in_4bit=True, full_finetuning=False)\n",
     "print(\"models loaded\", flush=True)\n",
 ]
 
@@ -176,6 +176,7 @@ MET_SRC = [
     "    \"e4b_only\": score([(r[\"ref_extract\"], p) for r, p in zip(rows, preds_all)]),\n",
     "}\n",
     "m[\"time\"] = {\"ner_secs\": round(ner_secs, 1), \"hybrid_llm_secs\": round(hybrid_secs, 1), \"e4b_all_secs\": round(e4b_secs, 1), \"e4b_calls_hybrid\": e4b_calls, \"fails_hybrid\": fails, \"fails_e4b\": fails_all, \"vram_gb\": round(vram_gb, 2)}\n",
+    "m[\"model\"] = \"unsloth/gemma-3-4b-it\"\n",
     "print(json.dumps(m, indent=1), flush=True)\n",
     "with open(WORKING_DIR + \"/eval_metrics.json\", \"w\", encoding=\"utf-8\") as f:\n",
     "    json.dump(m, f, ensure_ascii=False, indent=1)\n",

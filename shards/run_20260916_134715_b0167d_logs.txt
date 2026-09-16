@@ -1,15 +1,15 @@
-=== Kaggle Run Initialized: 2026-09-16T13:47:15.051213+00:00 ===
+=== Kaggle Run Initialized: 2026-09-16T13:51:40.703644+00:00 ===
 Kernel: akashh07/bench-eval500-ner-e4b-kaggle
 Title: Bench eval500 ner e4b.kaggle
 Accelerator: nvidia-tesla-t4-x2
 Trial Mode: False (Timeout: 43200s)
-Command: /home/ubuntu/kaggle-automation/.venv/bin/kaggle kernels push -p /home/ubuntu/kaggle-automation/data/notebooks/run_20260916_134715_b0167d --accelerator NvidiaTeslaT4 -t 43200
+Command: /home/ubuntu/kaggle-automation/.venv/bin/kaggle kernels push -p /home/ubuntu/kaggle-automation/data/notebooks/run_20260916_135140_b2fb07 --accelerator NvidiaTeslaT4 -t 43200
 
 [OUTPUT]
-Kernel version 2 successfully pushed.  Please check progress at https://www.kaggle.com/code/akashh07/bench-eval500-ner-e4b-kaggle
+Kernel version 3 successfully pushed.  Please check progress at https://www.kaggle.com/code/akashh07/bench-eval500-ner-e4b-kaggle
 
 
---- Live Stream Connected [2026-09-16T13:47:18.172488+00:00] ---
+--- Live Stream Connected [2026-09-16T13:51:42.930480+00:00] ---
 0.00s - Debugger warning: It seems that frozen modules are being used, which may
 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
 0.00s - to python to disable frozen modules.
@@ -18,58 +18,64 @@ Kernel version 2 successfully pushed.  Please check progress at https://www.kagg
 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
 0.00s - to python to disable frozen modules.
 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
---2026-09-16 13:47:44--  https://github.com/barryallen16/sivabharani-comments/raw/refs/heads/main/processing_notebook/eval_500.jsonl
-Resolving github.com (github.com)... 140.82.116.4
-Connecting to github.com (github.com)|140.82.116.4|:443... connected.
+--2026-09-16 13:52:12--  https://github.com/barryallen16/sivabharani-comments/raw/refs/heads/main/processing_notebook/eval_500.jsonl
+Resolving github.com (github.com)... 140.82.114.4
+Connecting to github.com (github.com)|140.82.114.4|:443... connected.
 HTTP request sent, awaiting response... 302 Found
 Location: https://media.githubusercontent.com/media/barryallen16/sivabharani-comments/refs/heads/main/processing_notebook/eval_500.jsonl [following]
---2026-09-16 13:47:44--  https://media.githubusercontent.com/media/barryallen16/sivabharani-comments/refs/heads/main/processing_notebook/eval_500.jsonl
-Resolving media.githubusercontent.com (media.githubusercontent.com)... 185.199.109.133, 185.199.110.133, 185.199.111.133, ...
-Connecting to media.githubusercontent.com (media.githubusercontent.com)|185.199.109.133|:443... connected.
+--2026-09-16 13:52:13--  https://media.githubusercontent.com/media/barryallen16/sivabharani-comments/refs/heads/main/processing_notebook/eval_500.jsonl
+Resolving media.githubusercontent.com (media.githubusercontent.com)... 185.199.110.133, 185.199.111.133, 185.199.109.133, ...
+Connecting to media.githubusercontent.com (media.githubusercontent.com)|185.199.110.133|:443... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 106971 (104K) [application/octet-stream]
 Saving to: â/kaggle/working/eval_500.jsonlâ
 
-          /kaggle/w   0%[                    ]       0  --.-KB/s               /kaggle/working/eva 100%[===================>] 104.46K  --.-KB/s    in 0.01s   
+          /kaggle/w   0%[                    ]       0  --.-KB/s               /kaggle/working/eva 100%[===================>] 104.46K  --.-KB/s    in 0.05s   
 
-2026-09-16 13:47:44 (7.10 MB/s) - â/kaggle/working/eval_500.jsonlâ saved [106971/106971]
+2026-09-16 13:52:13 (2.21 MB/s) - â/kaggle/working/eval_500.jsonlâ saved [106971/106971]
 
 500 /kaggle/working/eval_500.jsonl
 gpus=2
-Skipping import of cpp extensions due to incompatible torch version. Please upgrade to torch >= 2.11.0 (found 2.10.0+cu128).
-
-Skipping import of cpp extensions due to incompatible torch version. Please upgrade to torch >= 2.11.0 (found 2.10.0+cu128).
-/usr/local/lib/python3.12/dist-packages/torchao/quantization/quant_api.py:1558: SyntaxWarning: invalid escape sequence '\.'
-  * regex for parameter names, must start with `re:`, e.g. `re:language\.layers\..+\.q_proj.weight`.
-
-/usr/local/lib/python3.12/dist-packages/torchao/quantization/quant_api.py:1558: SyntaxWarning: invalid escape sequence '\.'
-  * regex for parameter names, must start with `re:`, e.g. `re:language\.layers\..+\.q_proj.weight`.
-BertForTokenClassification LOAD REPORT from: ai4bharat/IndicNER
-Key                          | Status     |  | 
------------------------------+------------+--+-
-bert.embeddings.position_ids | UNEXPECTED |  | 
-
-Notes:
-- UNEXPECTED	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.
-
-BertForTokenClassification LOAD REPORT from: ai4bharat/IndicNER
-Key                          | Status     |  | 
------------------------------+------------+--+-
-bert.embeddings.position_ids | UNEXPECTED |  | 
-
-Notes:
-- UNEXPECTED	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.
-/usr/local/lib/python3.12/dist-packages/unsloth/__init__.py:1554: UserWarning: WARNING: Unsloth should be imported before [transformers] to ensure all optimizations are applied. Your code may run slower or encounter memory issues without these optimizations.
-
-Please restructure your imports with 'import unsloth' at the top of your file.
-  from ._gpu_init import *
-
-/usr/local/lib/python3.12/dist-packages/unsloth/__init__.py:1554: UserWarning: WARNING: Unsloth should be imported before [transformers] to ensure all optimizations are applied. Your code may run slower or encounter memory issues without these optimizations.
-
-Please restructure your imports with 'import unsloth' at the top of your file.
-  from ._gpu_init import *
 ð¦¥ Unsloth: Will patch your computer to enable 2x faster free finetuning.
 ð¦¥ Unsloth Zoo will now patch everything to make training faster!
+[1mBertForTokenClassification LOAD REPORT[0m from: ai4bharat/IndicNER
+Key                          | Status     |  | 
+-----------------------------+------------+--+-
+bert.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+
+[1mBertForTokenClassification LOAD REPORT[0m from: ai4bharat/IndicNER
+Key                          | Status     |  | 
+-----------------------------+------------+--+-
+bert.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+==((====))==  Unsloth 2026.9.4: Fast Gemma4 patching. Transformers: 5.5.0.
+   \\   /|    Tesla T4. Num GPUs = 2. Max memory: 14.562 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 7.5. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = FALSE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Unsloth: Using float16 precision for gemma4 won't work! Using float32.
+total weights      : 10.152 GiB
+no_split classes   : ['Gemma4AudioLayer', 'Gemma4TextDecoderLayer', 'Gemma4VisionEncoderLayer']
+output head        : lm_head -> cuda:1
+head headroom      : 0.500 GiB
+activation reserve : 7.367 GiB requested
+tied to head       : ['model.language_model.embed_tokens']
+  cuda:0  budget  12.39 GiB  weights  5.390 GiB  free  6.999 GiB  reserve  6.999 GiB
+  cuda:1  budget  13.00 GiB  weights  4.761 GiB  free  8.235 GiB  reserve  7.367 GiB   <- output head
+note: Bnb4BitHfQuantizer.adjust_max_memory lowered the budget on cuda:0 13.766 -> 12.390 GiB, cuda:1 14.440 -> 12.996 GiB (memory the quantiser keeps for its own load-time buffers)
+note: tied embeddings: model.language_model.embed_tokens pinned with the head so accelerate does not have to mirror the weight across devices
+models loaded
+eval rows=500
+You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+
+You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+NER pass: 13.9s
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
   File "/usr/local/lib/python3.12/dist-packages/papermill/execute.py", line 131, in execute_notebook
@@ -78,71 +84,403 @@ Traceback (most recent call last):
     raise error
 papermill.exceptions.PapermillExecutionError: 
 ---------------------------------------------------------------------------
-Exception encountered at "In [7]":
+Exception encountered at "In [8]":
 ---------------------------------------------------------------------------
-KeyError                                  Traceback (most recent call last)
-/usr/local/lib/python3.12/dist-packages/transformers/models/auto/configuration_auto.py in from_pretrained(cls, pretrained_model_name_or_path, **kwargs)
-   1383             try:
--> 1384                 config_class = CONFIG_MAPPING[config_dict["model_type"]]
-   1385             except KeyError:
+RuntimeError                              Traceback (most recent call last)
+/tmp/ipykernel_23/4260104799.py in <cell line: 0>()
+     29 for r, flag in zip(rows, ner_flags):
+     30     if flag:
+---> 31         ph, f = e4b_extract(r["text"])
+     32         e4b_calls += 1
+     33         fails += f
 
-/usr/local/lib/python3.12/dist-packages/transformers/models/auto/configuration_auto.py in __getitem__(self, key)
-   1086         if key not in self._mapping:
--> 1087             raise KeyError(key)
-   1088         value = self._mapping[key]
+/tmp/ipykernel_23/4260104799.py in e4b_extract(text)
+      7     msgs = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+      8     inputs = tokenizer.apply_chat_template(msgs, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt").to("cuda")
+----> 9     out = model.generate(**inputs, max_new_tokens=64, do_sample=False)
+     10     gen = tokenizer.decode(out[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
+     11     cleaned = gen.replace("json", "").replace("```", "").strip()
 
-KeyError: 'gemma4'
+/usr/local/lib/python3.12/dist-packages/unsloth/models/vision.py in unsloth_base_fast_generate(self, *args, **kwargs)
+    926     try:
+    927         with torch.inference_mode(), autocaster:
+--> 928             output = self._old_generate(*args, **kwargs)
+    929     finally:
+    930         _clear_generation_caches(self)
 
-During handling of the above exception, another exception occurred:
+/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py in decorate_context(*args, **kwargs)
+    122         # pyrefly: ignore [bad-context-manager]
+    123         with ctx_factory():
+--> 124             return func(*args, **kwargs)
+    125 
+    126     return decorate_context
 
-ValueError                                Traceback (most recent call last)
-/usr/local/lib/python3.12/dist-packages/unsloth/models/loader.py in from_pretrained(model_name, max_seq_length, dtype, load_in_4bit, load_in_8bit, load_in_16bit, full_finetuning, token, device_map, device_map_planner_kwargs, rope_scaling, fix_tokenizer, trust_remote_code, use_gradient_checkpointing, resize_model_vocab, revision, return_logits, fullgraph, use_exact_model_name, auto_model, whisper_language, whisper_task, unsloth_force_compile, offload_embedding, float32_mixed_precision, fast_inference, gpu_memory_utilization, float8_kv_cache, random_state, max_lora_rank, disable_log_stats, qat_scheme, load_in_fp8, unsloth_tiled_mlp, target_parameters, text_only, *args, **kwargs)
-   1535             if model_config is None:
--> 1536                 model_config = AutoConfig.from_pretrained(
-   1537                     model_name,
+/usr/local/lib/python3.12/dist-packages/transformers/generation/utils.py in generate(self, inputs, generation_config, logits_processor, stopping_criteria, prefix_allowed_tokens_fn, synced_gpus, assistant_model, streamer, negative_prompt_ids, negative_prompt_attention_mask, custom_generate, **kwargs)
+   2541 
+   2542         # 9. Call generation mode
+-> 2543         result = decoding_method(
+   2544             self,
+   2545             input_ids,
 
-/usr/local/lib/python3.12/dist-packages/transformers/models/auto/configuration_auto.py in from_pretrained(cls, pretrained_model_name_or_path, **kwargs)
-   1385             except KeyError:
--> 1386                 raise ValueError(
-   1387                     f"The checkpoint you are trying to load has model type `{config_dict['model_type']}` "
+/usr/local/lib/python3.12/dist-packages/transformers/generation/utils.py in _sample(self, input_ids, logits_processor, stopping_criteria, generation_config, synced_gpus, streamer, **model_kwargs)
+   2734 
+   2735         prefill_consumed = False
+-> 2736         outputs = self._prefill(
+   2737             input_ids,
+   2738             generation_config,
 
-ValueError: The checkpoint you are trying to load has model type `gemma4` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+/usr/local/lib/python3.12/dist-packages/transformers/generation/utils.py in _prefill(self, input_ids, generation_config, model_kwargs, is_first_iteration)
+   3766                 **model_kwargs,
+   3767             )
+-> 3768             return self(**model_inputs, return_dict=True)
+   3769 
+   3770         # Chunked prefill (for very large contexts)
 
-You can update Transformers with the command `pip install --upgrade transformers`. If this does not work, and the checkpoint is very new, then there may not be a release version that supports this model yet. In this case, you can get the most up-to-date code by installing Transformers from source with the command `pip install git+https://github.com/huggingface/transformers.git`
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)
+   1774             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+   1775         else:
+-> 1776             return self._call_impl(*args, **kwargs)
+   1777 
+   1778     # torchrec tests the code consistency with the following code
 
-During handling of the above exception, another exception occurred:
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)
+   1785                 or _global_backward_pre_hooks or _global_backward_hooks
+   1786                 or _global_forward_hooks or _global_forward_pre_hooks):
+-> 1787             return forward_call(*args, **kwargs)
+   1788 
+   1789         result = None
 
-ValueError                                Traceback (most recent call last)
-/tmp/ipykernel_24/240107507.py in <cell line: 0>()
-     11     return any("PER" in e.get("entity_group", "") for e in ents)
-     12 from unsloth import FastModel
----> 13 model, tokenizer = FastModel.from_pretrained(model_name="unsloth/gemma-4-E4B-it", dtype=None, max_seq_length=1024, load_in_4bit=True, full_finetuning=False)
-     14 print("models loaded", flush=True)
+/usr/local/lib/python3.12/dist-packages/accelerate/hooks.py in new_forward(module, *args, **kwargs)
+    190                 output = module._old_forward(*args, **kwargs)
+    191         else:
+--> 192             output = module._old_forward(*args, **kwargs)
+    193         return module._hf_hook.post_forward(module, output)
+    194 
 
-/usr/local/lib/python3.12/dist-packages/unsloth/models/loader_utils.py in _wrapper(*args, **kwargs)
-   2092         _pb_were_disabled = _progress_bars_were_disabled()
-   2093         try:
--> 2094             return fn(*args, **kwargs)
-   2095         except Exception as e:
-   2096             # Skip if not network-related, or already retried by a nested decorator (else outer layers reload
+/usr/local/lib/python3.12/dist-packages/unsloth_zoo/temporary_patches/gemma4_moe.py in _patched_causal_lm_forward(self, input_ids, pixel_values, pixel_values_videos, input_features, attention_mask, input_features_mask, position_ids, image_position_ids, video_position_ids, past_key_values, mm_token_type_ids, inputs_embeds, labels, use_cache, logits_to_keep, **kwargs)
+    130         return_hidden_states = os.environ.get("UNSLOTH_RETURN_HIDDEN_STATES", "0") == "1"
+    131         if not return_hidden_states:
+--> 132             return _original_causal_lm_forward(
+    133                 self,
+    134                 input_ids=input_ids,
 
-/usr/local/lib/python3.12/dist-packages/unsloth/models/loader.py in from_pretrained(model_name, max_seq_length, dtype, load_in_4bit, load_in_8bit, load_in_16bit, full_finetuning, token, device_map, device_map_planner_kwargs, rope_scaling, fix_tokenizer, trust_remote_code, use_gradient_checkpointing, resize_model_vocab, revision, return_logits, fullgraph, use_exact_model_name, auto_model, whisper_language, whisper_task, unsloth_force_compile, offload_embedding, float32_mixed_precision, fast_inference, gpu_memory_utilization, float8_kv_cache, random_state, max_lora_rank, disable_log_stats, qat_scheme, load_in_fp8, unsloth_tiled_mlp, target_parameters, text_only, *args, **kwargs)
-   1560                         f"to obtain the latest transformers build, then restart this session."
-   1561                     )
--> 1562                 raise ValueError(
-   1563                     f"`{model_name}` is not supported yet in `transformers=={transformers_version}`.\n"
-   1564                     f"Please update transformers via `pip install --upgrade transformers` and try again."
+/kaggle/working/unsloth_compiled_cache/unsloth_compiled_module_gemma4.py in forward(self, input_ids, pixel_values, pixel_values_videos, input_features, attention_mask, input_features_mask, position_ids, image_position_ids, video_position_ids, past_key_values, mm_token_type_ids, inputs_embeds, labels, use_cache, logits_to_keep, **kwargs)
+   1654         **kwargs: Unpack[TransformersKwargs],
+   1655     ) -> Gemma4CausalLMOutputWithPast:
+-> 1656         return Gemma4ForConditionalGeneration_forward(self, input_ids=input_ids, pixel_values=pixel_values, pixel_values_videos=pixel_values_videos, input_features=input_features, attention_mask=attention_mask, input_features_mask=input_features_mask, position_ids=position_ids, image_position_ids=image_position_ids, video_position_ids=video_position_ids, past_key_values=past_key_values, mm_token_type_ids=mm_token_type_ids, inputs_embeds=inputs_embeds, labels=labels, use_cache=use_cache, logits_to_keep=logits_to_keep, **kwargs)
+   1657 
+   1658     def prepare_inputs_for_generation(
 
-ValueError: `unsloth/gemma-4-e4b-it-unsloth-bnb-4bit` is not supported yet in `transformers==5.0.0`.
-Please update transformers via `pip install --upgrade transformers` and try again.
+/usr/local/lib/python3.12/dist-packages/torch/_dynamo/external_utils.py in nonrecursive_disable_wrapper(*args, **kwargs)
+    201                 "Non-recursive torch.compiler.disable is not supported with torch.export."
+    202             )
+--> 203         return fn(*args, **kwargs)
+    204 
+    205     return nonrecursive_disable_wrapper
+
+/usr/local/lib/python3.12/dist-packages/transformers/utils/generic.py in wrapper(self, *args, **kwargs)
+    874         if return_dict_passed is not None:
+    875             return_dict = return_dict_passed
+--> 876         output = func(self, *args, **kwargs)
+    877         if not return_dict and not isinstance(output, tuple):
+    878             output = output.to_tuple()
+
+/kaggle/working/unsloth_compiled_cache/unsloth_compiled_module_gemma4.py in Gemma4ForConditionalGeneration_forward(self, input_ids, pixel_values, pixel_values_videos, input_features, attention_mask, input_features_mask, position_ids, image_position_ids, video_position_ids, past_key_values, mm_token_type_ids, inputs_embeds, labels, use_cache, logits_to_keep, **kwargs)
+   1469         Passed through to the vision encoder for positional embedding computation.
+   1470     """
+-> 1471     outputs = self.model(
+   1472         input_ids=input_ids,
+   1473         pixel_values=pixel_values,
+
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)
+   1774             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+   1775         else:
+-> 1776             return self._call_impl(*args, **kwargs)
+   1777 
+   1778     # torchrec tests the code consistency with the following code
+
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)
+   1785                 or _global_backward_pre_hooks or _global_backward_hooks
+   1786                 or _global_forward_hooks or _global_forward_pre_hooks):
+-> 1787             return forward_call(*args, **kwargs)
+   1788 
+   1789         result = None
+
+/usr/local/lib/python3.12/dist-packages/unsloth_zoo/temporary_patches/gemma4.py in forward(self, *args, **kwargs)
+    600                     pass
+    601                 try:
+--> 602                     return _orig_forward(self, *args, **kwargs)
+    603                 finally:
+    604                     try:
+
+/usr/local/lib/python3.12/dist-packages/transformers/utils/generic.py in wrapper(self, *args, **kwargs)
+    950                     output = func(self, *args, **kwargs)
+    951             else:
+--> 952                 output = func(self, *args, **kwargs)
+    953         # Restore original config value
+    954         finally:
+
+/usr/local/lib/python3.12/dist-packages/transformers/utils/generic.py in wrapper(self, *args, **kwargs)
+    874         if return_dict_passed is not None:
+    875             return_dict = return_dict_passed
+--> 876         output = func(self, *args, **kwargs)
+    877         if not return_dict and not isinstance(output, tuple):
+    878             output = output.to_tuple()
+
+/usr/local/lib/python3.12/dist-packages/transformers/models/gemma4/modeling_gemma4.py in forward(self, input_ids, pixel_values, pixel_values_videos, input_features, attention_mask, input_features_mask, position_ids, past_key_values, mm_token_type_ids, inputs_embeds, use_cache, image_position_ids, video_position_ids, **kwargs)
+   2192         if self.config.get_text_config().hidden_size_per_layer_input:
+   2193             pad_embedding = self.language_model.embed_tokens.weight[self.config.text_config.pad_token_id, :]
+-> 2194             llm_inputs_embeds = torch.where(multimodal_mask[..., None], pad_embedding.view(1, 1, -1), inputs_embeds)
+   2195             per_layer_inputs = self.language_model.get_per_layer_inputs(llm_input_ids, llm_inputs_embeds)
+   2196         else:
+
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cuda:1!
 
 /usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
   cells[i][c] = re.sub('\\\\\|', '|', cell)
 /usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
   text = re.sub(r'_', '\_', text) # Escape underscores in display text
 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
-[NbConvertApp] Writing 121566 bytes to __notebook__.ipynb
+[NbConvertApp] Writing 156018 bytes to __notebook__.ipynb
 [NbConvertApp] Converting notebook __notebook__.ipynb to html
-[NbConvertApp] Writing 407725 bytes to __results__.html
+[NbConvertApp] Writing 440321 bytes to __results__.html
 
 [STREAM] follower exited (rc=0, kernel=running); reconnecting in 3s...
+
+--- Live Stream Re-attached [2026-09-16T13:54:51.875151+00:00] ---
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+--2026-09-16 13:52:12--  https://github.com/barryallen16/sivabharani-comments/raw/refs/heads/main/processing_notebook/eval_500.jsonl
+Resolving github.com (github.com)... 140.82.114.4
+Connecting to github.com (github.com)|140.82.114.4|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://media.githubusercontent.com/media/barryallen16/sivabharani-comments/refs/heads/main/processing_notebook/eval_500.jsonl [following]
+--2026-09-16 13:52:13--  https://media.githubusercontent.com/media/barryallen16/sivabharani-comments/refs/heads/main/processing_notebook/eval_500.jsonl
+Resolving media.githubusercontent.com (media.githubusercontent.com)... 185.199.110.133, 185.199.111.133, 185.199.109.133, ...
+Connecting to media.githubusercontent.com (media.githubusercontent.com)|185.199.110.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 106971 (104K) [application/octet-stream]
+Saving to: ‘/kaggle/working/eval_500.jsonl’
+
+          /kaggle/w   0%[                    ]       0  --.-KB/s               /kaggle/working/eva 100%[===================>] 104.46K  --.-KB/s    in 0.05s   
+
+2026-09-16 13:52:13 (2.21 MB/s) - ‘/kaggle/working/eval_500.jsonl’ saved [106971/106971]
+
+500 /kaggle/working/eval_500.jsonl
+gpus=2
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+[1mBertForTokenClassification LOAD REPORT[0m from: ai4bharat/IndicNER
+Key                          | Status     |  | 
+-----------------------------+------------+--+-
+bert.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+
+[1mBertForTokenClassification LOAD REPORT[0m from: ai4bharat/IndicNER
+Key                          | Status     |  | 
+-----------------------------+------------+--+-
+bert.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+==((====))==  Unsloth 2026.9.4: Fast Gemma4 patching. Transformers: 5.5.0.
+   \\   /|    Tesla T4. Num GPUs = 2. Max memory: 14.562 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 7.5. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = FALSE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Unsloth: Using float16 precision for gemma4 won't work! Using float32.
+total weights      : 10.152 GiB
+no_split classes   : ['Gemma4AudioLayer', 'Gemma4TextDecoderLayer', 'Gemma4VisionEncoderLayer']
+output head        : lm_head -> cuda:1
+head headroom      : 0.500 GiB
+activation reserve : 7.367 GiB requested
+tied to head       : ['model.language_model.embed_tokens']
+  cuda:0  budget  12.39 GiB  weights  5.390 GiB  free  6.999 GiB  reserve  6.999 GiB
+  cuda:1  budget  13.00 GiB  weights  4.761 GiB  free  8.235 GiB  reserve  7.367 GiB   <- output head
+note: Bnb4BitHfQuantizer.adjust_max_memory lowered the budget on cuda:0 13.766 -> 12.390 GiB, cuda:1 14.440 -> 12.996 GiB (memory the quantiser keeps for its own load-time buffers)
+note: tied embeddings: model.language_model.embed_tokens pinned with the head so accelerate does not have to mirror the weight across devices
+models loaded
+eval rows=500
+You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+
+You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+NER pass: 13.9s
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/usr/local/lib/python3.12/dist-packages/papermill/execute.py", line 131, in execute_notebook
+    raise_for_execution_errors(nb, output_path)
+  File "/usr/local/lib/python3.12/dist-packages/papermill/execute.py", line 251, in raise_for_execution_errors
+    raise error
+papermill.exceptions.PapermillExecutionError: 
+---------------------------------------------------------------------------
+Exception encountered at "In [8]":
+---------------------------------------------------------------------------
+RuntimeError                              Traceback (most recent call last)
+/tmp/ipykernel_23/4260104799.py in <cell line: 0>()
+     29 for r, flag in zip(rows, ner_flags):
+     30     if flag:
+---> 31         ph, f = e4b_extract(r["text"])
+     32         e4b_calls += 1
+     33         fails += f
+
+/tmp/ipykernel_23/4260104799.py in e4b_extract(text)
+      7     msgs = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+      8     inputs = tokenizer.apply_chat_template(msgs, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt").to("cuda")
+----> 9     out = model.generate(**inputs, max_new_tokens=64, do_sample=False)
+     10     gen = tokenizer.decode(out[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
+     11     cleaned = gen.replace("json", "").replace("```", "").strip()
+
+/usr/local/lib/python3.12/dist-packages/unsloth/models/vision.py in unsloth_base_fast_generate(self, *args, **kwargs)
+    926     try:
+    927         with torch.inference_mode(), autocaster:
+--> 928             output = self._old_generate(*args, **kwargs)
+    929     finally:
+    930         _clear_generation_caches(self)
+
+/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py in decorate_context(*args, **kwargs)
+    122         # pyrefly: ignore [bad-context-manager]
+    123         with ctx_factory():
+--> 124             return func(*args, **kwargs)
+    125 
+    126     return decorate_context
+
+/usr/local/lib/python3.12/dist-packages/transformers/generation/utils.py in generate(self, inputs, generation_config, logits_processor, stopping_criteria, prefix_allowed_tokens_fn, synced_gpus, assistant_model, streamer, negative_prompt_ids, negative_prompt_attention_mask, custom_generate, **kwargs)
+   2541 
+   2542         # 9. Call generation mode
+-> 2543         result = decoding_method(
+   2544             self,
+   2545             input_ids,
+
+/usr/local/lib/python3.12/dist-packages/transformers/generation/utils.py in _sample(self, input_ids, logits_processor, stopping_criteria, generation_config, synced_gpus, streamer, **model_kwargs)
+   2734 
+   2735         prefill_consumed = False
+-> 2736         outputs = self._prefill(
+   2737             input_ids,
+   2738             generation_config,
+
+/usr/local/lib/python3.12/dist-packages/transformers/generation/utils.py in _prefill(self, input_ids, generation_config, model_kwargs, is_first_iteration)
+   3766                 **model_kwargs,
+   3767             )
+-> 3768             return self(**model_inputs, return_dict=True)
+   3769 
+   3770         # Chunked prefill (for very large contexts)
+
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)
+   1774             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+   1775         else:
+-> 1776             return self._call_impl(*args, **kwargs)
+   1777 
+   1778     # torchrec tests the code consistency with the following code
+
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)
+   1785                 or _global_backward_pre_hooks or _global_backward_hooks
+   1786                 or _global_forward_hooks or _global_forward_pre_hooks):
+-> 1787             return forward_call(*args, **kwargs)
+   1788 
+   1789         result = None
+
+/usr/local/lib/python3.12/dist-packages/accelerate/hooks.py in new_forward(module, *args, **kwargs)
+    190                 output = module._old_forward(*args, **kwargs)
+    191         else:
+--> 192             output = module._old_forward(*args, **kwargs)
+    193         return module._hf_hook.post_forward(module, output)
+    194 
+
+/usr/local/lib/python3.12/dist-packages/unsloth_zoo/temporary_patches/gemma4_moe.py in _patched_causal_lm_forward(self, input_ids, pixel_values, pixel_values_videos, input_features, attention_mask, input_features_mask, position_ids, image_position_ids, video_position_ids, past_key_values, mm_token_type_ids, inputs_embeds, labels, use_cache, logits_to_keep, **kwargs)
+    130         return_hidden_states = os.environ.get("UNSLOTH_RETURN_HIDDEN_STATES", "0") == "1"
+    131         if not return_hidden_states:
+--> 132             return _original_causal_lm_forward(
+    133                 self,
+    134                 input_ids=input_ids,
+
+/kaggle/working/unsloth_compiled_cache/unsloth_compiled_module_gemma4.py in forward(self, input_ids, pixel_values, pixel_values_videos, input_features, attention_mask, input_features_mask, position_ids, image_position_ids, video_position_ids, past_key_values, mm_token_type_ids, inputs_embeds, labels, use_cache, logits_to_keep, **kwargs)
+   1654         **kwargs: Unpack[TransformersKwargs],
+   1655     ) -> Gemma4CausalLMOutputWithPast:
+-> 1656         return Gemma4ForConditionalGeneration_forward(self, input_ids=input_ids, pixel_values=pixel_values, pixel_values_videos=pixel_values_videos, input_features=input_features, attention_mask=attention_mask, input_features_mask=input_features_mask, position_ids=position_ids, image_position_ids=image_position_ids, video_position_ids=video_position_ids, past_key_values=past_key_values, mm_token_type_ids=mm_token_type_ids, inputs_embeds=inputs_embeds, labels=labels, use_cache=use_cache, logits_to_keep=logits_to_keep, **kwargs)
+   1657 
+   1658     def prepare_inputs_for_generation(
+
+/usr/local/lib/python3.12/dist-packages/torch/_dynamo/external_utils.py in nonrecursive_disable_wrapper(*args, **kwargs)
+    201                 "Non-recursive torch.compiler.disable is not supported with torch.export."
+    202             )
+--> 203         return fn(*args, **kwargs)
+    204 
+    205     return nonrecursive_disable_wrapper
+
+/usr/local/lib/python3.12/dist-packages/transformers/utils/generic.py in wrapper(self, *args, **kwargs)
+    874         if return_dict_passed is not None:
+    875             return_dict = return_dict_passed
+--> 876         output = func(self, *args, **kwargs)
+    877         if not return_dict and not isinstance(output, tuple):
+    878             output = output.to_tuple()
+
+/kaggle/working/unsloth_compiled_cache/unsloth_compiled_module_gemma4.py in Gemma4ForConditionalGeneration_forward(self, input_ids, pixel_values, pixel_values_videos, input_features, attention_mask, input_features_mask, position_ids, image_position_ids, video_position_ids, past_key_values, mm_token_type_ids, inputs_embeds, labels, use_cache, logits_to_keep, **kwargs)
+   1469         Passed through to the vision encoder for positional embedding computation.
+   1470     """
+-> 1471     outputs = self.model(
+   1472         input_ids=input_ids,
+   1473         pixel_values=pixel_values,
+
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)
+   1774             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+   1775         else:
+-> 1776             return self._call_impl(*args, **kwargs)
+   1777 
+   1778     # torchrec tests the code consistency with the following code
+
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)
+   1785                 or _global_backward_pre_hooks or _global_backward_hooks
+   1786                 or _global_forward_hooks or _global_forward_pre_hooks):
+-> 1787             return forward_call(*args, **kwargs)
+   1788 
+   1789         result = None
+
+/usr/local/lib/python3.12/dist-packages/unsloth_zoo/temporary_patches/gemma4.py in forward(self, *args, **kwargs)
+    600                     pass
+    601                 try:
+--> 602                     return _orig_forward(self, *args, **kwargs)
+    603                 finally:
+    604                     try:
+
+/usr/local/lib/python3.12/dist-packages/transformers/utils/generic.py in wrapper(self, *args, **kwargs)
+    950                     output = func(self, *args, **kwargs)
+    951             else:
+--> 952                 output = func(self, *args, **kwargs)
+    953         # Restore original config value
+    954         finally:
+
+/usr/local/lib/python3.12/dist-packages/transformers/utils/generic.py in wrapper(self, *args, **kwargs)
+    874         if return_dict_passed is not None:
+    875             return_dict = return_dict_passed
+--> 876         output = func(self, *args, **kwargs)
+    877         if not return_dict and not isinstance(output, tuple):
+    878             output = output.to_tuple()
+
+/usr/local/lib/python3.12/dist-packages/transformers/models/gemma4/modeling_gemma4.py in forward(self, input_ids, pixel_values, pixel_values_videos, input_features, attention_mask, input_features_mask, position_ids, past_key_values, mm_token_type_ids, inputs_embeds, use_cache, image_position_ids, video_position_ids, **kwargs)
+   2192         if self.config.get_text_config().hidden_size_per_layer_input:
+   2193             pad_embedding = self.language_model.embed_tokens.weight[self.config.text_config.pad_token_id, :]
+-> 2194             llm_inputs_embeds = torch.where(multimodal_mask[..., None], pad_embedding.view(1, 1, -1), inputs_embeds)
+   2195             per_layer_inputs = self.language_model.get_per_layer_inputs(llm_input_ids, llm_inputs_embeds)
+   2196         else:
+
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cuda:1!
+
+/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+[NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+[NbConvertApp] Writing 156018 bytes to __notebook__.ipynb
+[NbConvertApp] Converting notebook __notebook__.ipynb to html
+[NbConvertApp] Writing 440321 bytes to __results__.html
+
+--- Stream ended: kernel error [2026-09-16T13:54:56.867914+00:00] ---

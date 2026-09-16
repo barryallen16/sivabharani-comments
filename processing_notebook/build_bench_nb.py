@@ -182,7 +182,31 @@ MET_SRC = [
     "print(\"saved eval_metrics.json + eval_preds.jsonl\", flush=True)\n",
 ]
 
-cells += [cell(LOAD_SRC), cell(RUN_SRC), cell(MET_SRC)]
+CLEAN_SRC = [
+    "import gc, shutil, os\n",
+    "for _n in [\"model\", \"tokenizer\", \"ner\"]:\n",
+    "    try:\n",
+    "        del globals()[_n]\n",
+    "    except KeyError:\n",
+    "        pass\n",
+    "gc.collect()\n",
+    "try:\n",
+    "    import torch\n",
+    "    if torch.cuda.is_available():\n",
+    "        torch.cuda.empty_cache()\n",
+    "except Exception:\n",
+    "    pass\n",
+    "for _p in [os.path.expanduser(\"~/.cache/huggingface\"), os.path.expanduser(\"~/.cache/uv\"), \"/root/.cache/huggingface\"]:\n",
+    "    try:\n",
+    "        if os.path.isdir(_p):\n",
+    "            shutil.rmtree(_p, ignore_errors=True)\n",
+    "            print(f\"removed {_p}\", flush=True)\n",
+    "    except Exception as _e:\n",
+    "        print(f\"cleanup skip {_p}: {_e}\", flush=True)\n",
+    "print(\"model files + caches removed; outputs kept\", flush=True)\n",
+]
+
+cells += [cell(LOAD_SRC), cell(RUN_SRC), cell(MET_SRC), cell(CLEAN_SRC)]
 nb = {
     "cells": cells,
     "metadata": {

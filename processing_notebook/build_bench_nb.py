@@ -60,7 +60,7 @@ cells.append(
             "!uv pip install --system sentencepiece protobuf datasets huggingface_hub hf_transfer\n",
             "!uv pip install --system --no-deps unsloth_zoo bitsandbytes accelerate {xformers} peft trl triton unsloth\n",
             "!uv pip install --system --no-deps --upgrade torchao\n",
-            "!uv pip install --system --no-deps transformers tokenizers\n",
+            "!uv pip install --system --upgrade --no-deps transformers==5.5.0 \"tokenizers>=0.22.0,<=0.23.0\"\n",
             "!uv pip install --system torchcodec\n",
             "import torch; torch._dynamo.config.recompile_limit = 64;\n",
         ]
@@ -83,6 +83,7 @@ LOAD_SRC = [
     "import torch\n",
     "print(f\"gpus={torch.cuda.device_count()}\", flush=True)\n",
     "assert torch.cuda.device_count() > 0, \"need T4 x2\"\n",
+    "from unsloth import FastModel\n",
     "from transformers import pipeline\n",
     "ner = pipeline(\"token-classification\", model=\"ai4bharat/IndicNER\", aggregation_strategy=\"simple\", device=0)\n",
     "def ner_has_person(text):\n",
@@ -91,7 +92,6 @@ LOAD_SRC = [
     "    except Exception:\n",
     "        return True\n",
     "    return any(\"PER\" in e.get(\"entity_group\", \"\") for e in ents)\n",
-    "from unsloth import FastModel\n",
     "model, tokenizer = FastModel.from_pretrained(model_name=\"unsloth/gemma-4-E4B-it\", dtype=None, max_seq_length=1024, load_in_4bit=True, full_finetuning=False)\n",
     "print(\"models loaded\", flush=True)\n",
 ]

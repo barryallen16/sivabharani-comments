@@ -99,7 +99,9 @@ LOAD_SRC = [
 RUN_SRC = [
     "import json, time\n",
     "SYS = ('Extract person names from Tamil text. Reply JSON only: {\"tamil\": [...], \"english\": [...]}. Empty lists if none.\\n'\n",
+    "'Rules: names must be Tamil-script person names only. Never output English words, brands, objects, greetings (bro, hello, hey, you, iphone, processor).\\n'\n",
     "'Example: Input: வணக்கம், நான் சூர்யா. Output: {\"tamil\": [\"சூர்யா\"], \"english\": [\"Surya\"]}\\n'\n",
+    "'Example: Input: ப்ரோ iphone processor நல்லா இருக்கு. Output: {\"tamil\": [], \"english\": []}\\n'\n",
     "'Input: {TEXT}\\nOutput:')\n",
     "def e4b_extract(text):\n",
     "    prompt = SYS.replace(\"{TEXT}\", text)\n",

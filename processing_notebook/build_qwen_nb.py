@@ -1,0 +1,215 @@
+"""Build bench-eval500-qwen7b.kaggle.ipynb (run once, then keep as source). Qwen challenger, same eval."""
+
+import json
+from pathlib import Path
+
+OUT = Path(__file__).resolve().parent / "bench-eval500-qwen7b.kaggle.ipynb"
+MODEL_ID = "Tamil-ai/tamil-qwen25-7b-instruct"
+
+SYS_LINES = [
+    "SYS = ('Extract person names from Tamil text. Reply JSON only: {\"tamil\": [...], \"english\": [...]}. Empty lists if none.\\n'\n",
+    "'Rules: names must be Tamil-script person names only. Never output English words, brands, objects, greetings (bro, hello, hey, you, iphone, processor).\\n'\n",
+    "'English must list the transliteration of each Tamil name in the same order - never empty when tamil is non-empty.\\n'\n",
+    "'Only extract names that appear verbatim in the Input. Never copy names from these examples.\\n'\n",
+    "'Example: Input: வணக்கம், நான் சூர்யா. Output: {\"tamil\": [\"சூர்யா\"], \"english\": [\"Surya\"]}\\n'\n",
+    "'Example: Input: ப்ரோ iphone processor நல்லா இருக்கு. Output: {\"tamil\": [], \"english\": []}\\n'\n",
+    "'Input: {TEXT}\\nOutput:')\n",
+]
+
+
+def cell(source, tags=None):
+    return {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {"tags": tags} if tags else {},
+        "outputs": [],
+        "source": source,
+    }
+
+
+cells = [
+    cell(
+        [
+            "import os as _ka_os2\n",
+            'WORKING_DIR = "/kaggle/working" if _ka_os2.path.exists("/kaggle/working") else _ka_os2.getcwd()\n',
+            'SCRATCH_DIR = "/kaggle/tmp" if _ka_os2.path.exists("/kaggle/tmp") else _ka_os2.getcwd()\n',
+        ],
+        tags=["kaggle-automation-dirs"],
+    ),
+    cell(
+        [
+            "import sys as _ka_sys\n",
+            "try:\n",
+            "    _ka_sys.stdout.reconfigure(line_buffering=True)\n",
+            "    _ka_sys.stderr.reconfigure(line_buffering=True)\n",
+            "except Exception:\n",
+            "    pass\n",
+        ],
+        tags=["kaggle-automation-buffering"],
+    ),
+    cell(
+        [
+            "%%capture\n",
+            "!uv pip install --system sentencepiece protobuf huggingface_hub hf_transfer\n",
+            "!uv pip install --system --upgrade --no-deps accelerate bitsandbytes\n",
+            "!uv pip install --system --upgrade --no-deps transformers==5.5.0 \"tokenizers>=0.22.0,<=0.23.0\"\n",
+            "import torch; print(torch.__version__, torch.cuda.device_count(), flush=True)\n",
+        ]
+    ),
+    cell(
+        [
+            "import os\n",
+            "os.makedirs(SCRATCH_DIR, exist_ok=True)\n",
+            "os.makedirs(WORKING_DIR, exist_ok=True)\n",
+            "!wget -O {SCRATCH_DIR}/eval_500.jsonl https://github.com/barryallen16/sivabharani-comments/raw/refs/heads/main/processing_notebook/eval_500.jsonl\n",
+            "!wc -l {SCRATCH_DIR}/eval_500.jsonl\n",
+        ]
+    ),
+]
+
+LOAD_SRC = [
+    "import torch\n",
+    "print(f\"gpus={torch.cuda.device_count()}\", flush=True)\n",
+    "assert torch.cuda.device_count() > 0, \"need T4 x2\"\n",
+    "from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig\n",
+    "ner = pipeline(\"token-classification\", model=\"ai4bharat/IndicNER\", aggregation_strategy=\"simple\", device=0, batch_size=128)\n",
+    "def ner_has_person(text):\n",
+    "    try:\n",
+    "        ents = ner(text)\n",
+    "    except Exception:\n",
+    "        return True\n",
+    "    return any(\"PER\" in e.get(\"entity_group\", \"\") for e in ents)\n",
+    "bnb = BitsAndBytesConfig(load_in_4bit=True)\n",
+    "tokenizer = AutoTokenizer.from_pretrained(\"Tamil-ai/tamil-qwen25-7b-instruct\")\n",
+    "model = AutoModelForCausalLM.from_pretrained(\"Tamil-ai/tamil-qwen25-7b-instruct\", quantization_config=bnb, device_map=\"auto\")\n",
+    "print(\"models loaded\", flush=True)\n",
+]
+
+RUN_SRC = [
+    "import json, time\n",
+] + SYS_LINES + [
+    "def llm_extract(text):\n",
+    "    prompt = SYS.replace(\"{TEXT}\", text)\n",
+    "    msgs = [{\"role\": \"user\", \"content\": prompt}]\n",
+    "    inputs = tokenizer.apply_chat_template(msgs, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors=\"pt\")\n",
+    "    try:\n",
+    "        _dev = model.model.embed_tokens.weight.device\n",
+    "    except Exception:\n",
+    "        _dev = \"cuda:0\"\n",
+    "    inputs = inputs.to(_dev)\n",
+    "    out = model.generate(**inputs, max_new_tokens=64, do_sample=False)\n",
+    "    gen = tokenizer.decode(out[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)\n",
+    "    cleaned = gen.replace(\"json\", \"\").replace(\"```\", \"\").strip()\n",
+    "    try:\n",
+    "        return json.loads(cleaned), False\n",
+    "    except Exception:\n",
+    "        return {\"tamil\": [], \"english\": []}, True\n",
+    "def has_names(ex):\n",
+    "    return bool(ex.get(\"tamil\")) or bool(ex.get(\"english\"))\n",
+    "rows = [json.loads(l) for l in open(SCRATCH_DIR + \"/eval_500.jsonl\", encoding=\"utf-8\") if l.strip()]\n",
+    "print(f\"eval rows={len(rows)}\", flush=True)\n",
+    "t0 = time.perf_counter()\n",
+    "ner_flags = [ner_has_person(r[\"text\"]) for r in rows]\n",
+    "ner_secs = time.perf_counter() - t0\n",
+    "print(f\"NER pass: {ner_secs:.1f}s\", flush=True)\n",
+]
+
+RUN_SRC += [
+    "preds = []\n",
+    "t1 = time.perf_counter()\n",
+    "llm_calls = 0\n",
+    "fails = 0\n",
+    "for r, flag in zip(rows, ner_flags):\n",
+    "    if flag:\n",
+    "        ph, f = llm_extract(r[\"text\"])\n",
+    "        llm_calls += 1\n",
+    "        fails += f\n",
+    "    else:\n",
+    "        ph = {\"tamil\": [], \"english\": []}\n",
+    "    pn = {\"tamil\": [\"?\"], \"english\": [\"?\"]} if flag else {\"tamil\": [], \"english\": []}\n",
+    "    preds.append((pn, ph))\n",
+    "hybrid_secs = time.perf_counter() - t1\n",
+    "print(f\"hybrid LLM: {hybrid_secs:.1f}s calls={llm_calls} fails={fails}\", flush=True)\n",
+    "t2 = time.perf_counter()\n",
+    "preds_all = []\n",
+    "fails_all = 0\n",
+    "for ri, r in enumerate(rows):\n",
+    "    p, f = llm_extract(r[\"text\"])\n",
+    "    preds_all.append(p)\n",
+    "    fails_all += f\n",
+    "    if (ri + 1) % 100 == 0:\n",
+    "        print(f\"llm-only {ri + 1}/{len(rows)}\", flush=True)\n",
+    "llm_secs = time.perf_counter() - t2\n",
+    "vram_gb = torch.cuda.max_memory_allocated() / 1e9\n",
+    "print(f\"llm-only: {llm_secs:.1f}s fails={fails_all} vram={vram_gb:.1f}GB\", flush=True)\n",
+]
+
+MET_SRC = [
+    "def score(pairs):\n",
+    "    tp = fp = fn = tem = een = 0\n",
+    "    for ref, p in pairs:\n",
+    "        rh, ph = has_names(ref), has_names(p)\n",
+    "        tp += rh and ph\n",
+    "        fp += (not rh) and ph\n",
+    "        fn += rh and (not ph)\n",
+    "        if rh and ph:\n",
+    "            tem += p.get(\"tamil\") == ref.get(\"tamil\")\n",
+    "            een += p.get(\"english\") == ref.get(\"english\")\n",
+    "    pr = tp / (tp + fp) if tp + fp else 0.0\n",
+    "    rc = tp / (tp + fn) if tp + fn else 0.0\n",
+    "    f1 = 2 * pr * rc / (pr + rc) if pr + rc else 0.0\n",
+    "    return {\"P\": round(pr, 3), \"R\": round(rc, 3), \"F1\": round(f1, 3), \"tamil_exact\": tem, \"eng_exact\": een}\n",
+    "m = {\n",
+    "    \"ner\": score([(r[\"ref_extract\"], pn) for r, (pn, ph) in zip(rows, preds)]),\n",
+    "    \"hybrid\": score([(r[\"ref_extract\"], ph) for r, (pn, ph) in zip(rows, preds)]),\n",
+    "    \"llm_only\": score([(r[\"ref_extract\"], p) for r, p in zip(rows, preds_all)]),\n",
+    "}\n",
+    "m[\"model\"] = \"Tamil-ai/tamil-qwen25-7b-instruct\"\n",
+    "m[\"time\"] = {\"ner_secs\": round(ner_secs, 1), \"hybrid_llm_secs\": round(hybrid_secs, 1), \"llm_all_secs\": round(llm_secs, 1), \"llm_calls_hybrid\": llm_calls, \"fails_hybrid\": fails, \"fails_llm\": fails_all, \"vram_gb\": round(vram_gb, 2)}\n",
+    "print(json.dumps(m, indent=1), flush=True)\n",
+    "with open(WORKING_DIR + \"/eval_metrics_qwen.json\", \"w\", encoding=\"utf-8\") as f:\n",
+    "    json.dump(m, f, ensure_ascii=False, indent=1)\n",
+    "with open(WORKING_DIR + \"/eval_preds_qwen.jsonl\", \"w\", encoding=\"utf-8\") as f:\n",
+    "    for r, (pn, ph), pa in zip(rows, preds, preds_all):\n",
+    "        json.dump({\"video_id\": r[\"video_id\"], \"text\": r[\"text\"], \"ref\": r[\"ref_extract\"], \"ner\": pn, \"hybrid\": ph, \"llm\": pa}, f, ensure_ascii=False)\n",
+    "        f.write(\"\\n\")\n",
+    "print(\"saved eval_metrics_qwen.json + eval_preds_qwen.jsonl\", flush=True)\n",
+]
+
+CLEAN_SRC = [
+    "import gc, shutil, os\n",
+    "for _n in [\"model\", \"tokenizer\", \"ner\"]:\n",
+    "    try:\n",
+    "        del globals()[_n]\n",
+    "    except KeyError:\n",
+    "        pass\n",
+    "gc.collect()\n",
+    "try:\n",
+    "    import torch\n",
+    "    if torch.cuda.is_available():\n",
+    "        torch.cuda.empty_cache()\n",
+    "except Exception:\n",
+    "    pass\n",
+    "for _p in [os.path.expanduser(\"~/.cache/huggingface\"), os.path.expanduser(\"~/.cache/uv\"), \"/root/.cache/huggingface\"]:\n",
+    "    try:\n",
+    "        if os.path.isdir(_p):\n",
+    "            shutil.rmtree(_p, ignore_errors=True)\n",
+    "            print(f\"removed {_p}\", flush=True)\n",
+    "    except Exception as _e:\n",
+    "        print(f\"cleanup skip {_p}: {_e}\", flush=True)\n",
+    "print(\"model files + caches removed; outputs kept\", flush=True)\n",
+]
+
+cells += [cell(LOAD_SRC), cell(RUN_SRC), cell(MET_SRC), cell(CLEAN_SRC)]
+nb = {
+    "cells": cells,
+    "metadata": {
+        "kaggle": {"accelerator": "NvidiaTeslaT4", "isGpuEnabled": True, "isInternetEnabled": True, "language": "python"},
+        "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
+        "language_info": {"name": "python", "version": "3.12.13"},
+    },
+    "nbformat": 4,
+    "nbformat_minor": 4,
+}
+OUT.write_text(json.dumps(nb, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+print(f"wrote {OUT} cells={len(cells)}")

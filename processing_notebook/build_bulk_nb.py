@@ -89,11 +89,21 @@ cells = [
 cells.append(
     cell(
         [
-            "import os\n",
+            "import os, time, urllib.request\n",
             "os.makedirs(SCRATCH_DIR, exist_ok=True)\n",
             "os.makedirs(WORKING_DIR, exist_ok=True)\n",
-            "\"!wget -O {SCRATCH_DIR}/tamil_transcripts.jsonl https://github.com/barryallen16/sivabharani-comments/raw/refs/heads/main/transcripts/output/tamil_transcripts.jsonl\"\n".replace('"', ''),
-            "\"!wc -l {SCRATCH_DIR}/tamil_transcripts.jsonl\"\n".replace('"', ''),
+            "_url = \"https://github.com/barryallen16/sivabharani-comments/raw/refs/heads/main/transcripts/output/tamil_transcripts.jsonl\"\n",
+            "_dst = SCRATCH_DIR + \"/tamil_transcripts.jsonl\"\n",
+            "for _t in range(5):\n",
+            "    try:\n",
+            "        urllib.request.urlretrieve(_url, _dst)\n",
+            "        break\n",
+            "    except Exception as _e:\n",
+            "        print(f\"download try {_t + 1} failed: {_e}\", flush=True)\n",
+            "        time.sleep(30)\n",
+            "else:\n",
+            "    raise RuntimeError(\"tamil_transcripts.jsonl download failed after retries\")\n",
+            "print(f\"downloaded {_dst}\", flush=True)\n",
         ]
     )
 )
@@ -148,6 +158,7 @@ RUN_SRC = [
     "else:\n",
     "    work = remaining[SHARD_ID::TOTAL_SHARDS]\n",
     "print(f\"videos total={len(videos)} remaining={len(remaining)} this shard={len(work)}\", flush=True)\n",
+    "assert len(videos) > 0, \"input file empty, aborting\"\n",
 ] + SYS_LINES + [
     "def llm_extract(text):\n",
     "    prompt = SYS.replace(\"{TEXT}\", text)\n",

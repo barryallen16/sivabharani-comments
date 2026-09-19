@@ -108,11 +108,12 @@ LOAD_SRC = [
 
 RUN_SRC = [
     "import json, time\n",
-    "SYS = ('Extract person names from Tamil text. Reply JSON only: {\"tamil\": [...], \"english\": [...]}. Empty lists if none.\\n'\n",
-    "'Rules: names must be Tamil-script person names only. Never output English words, brands, objects, greetings (bro, hello, hey, you, iphone, processor).\\n'\n",
+    "SYS = ('Identify the commenter name or username read aloud in this Tamil transcript chunk. Reply JSON only: {\"tamil\": [...], \"english\": [...]}. Empty lists if none.\\n'\n",
+    "'Rules: names may be Tamil person names or Tamil-script renderings of English usernames (like ஜான்சின்). Transcribe exactly as heard. Never output common Tamil words, English common words, brands, objects, greetings (bro, hello, hey, you, iphone, processor, camera, sony).\\n'\n",
     "'English must list the transliteration of each Tamil name in the same order - never empty when tamil is non-empty.\\n'\n",
     "'Only extract names that appear verbatim in the Input. Never copy names from these examples.\\n'\n",
     "'Example: Input: வணக்கம், நான் சூர்யா. Output: {\"tamil\": [\"சூர்யா\"], \"english\": [\"Surya\"]}\\n'\n",
+    "'Example: Input: இப்ப என்ன ஜான்சின் கேக்குறாரு. Output: {\"tamil\": [\"ஜான்சின்\"], \"english\": [\"Johnsin\"]}\\n'\n",
     "'Example: Input: ப்ரோ iphone processor நல்லா இருக்கு. Output: {\"tamil\": [], \"english\": []}\\n'\n",
     "'Input: {TEXT}\\nOutput:')\n",
     "def e4b_extract(text):\n",

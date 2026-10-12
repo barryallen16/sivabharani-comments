@@ -42,6 +42,9 @@ Output: {"tamil": ["டார்க் ஹன்டர்"], "english": ["darkhu
 Input: சொல்லுங்க. உங்க போன் நம்பர் சொல்லுங்க
 Output: {"tamil": [], "english": [], "mentioned": []}
 
+Input: நரசிம்மா அப்படின்னு சொல்லி நம்ம குரூப்ல / ஒரு நண்பருடா குரூப் / ஆமா அவரு சொல்லிருக்காரு
+Output: {"tamil": ["நரசிம்மா"], "english": ["narasimha"], "mentioned": []}
+
 Input: விடைபெற்று கொள்வது சிவபரணி நிரஞ்சன் விக்னேஷ் பாக்கலாங்க பாய் பாய்
 Output: {"tamil": [], "english": [], "mentioned": []}
 ```

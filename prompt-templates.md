@@ -8,7 +8,7 @@ A commenter name appears in ONE of these cue patterns (name comes FIRST, cue fol
 2. bare name with no cue (he just reads the name, then the comment)
 3. name + என்ன சொல்லிருக்காரு (what he said). Example: கவின் என்ன சொல்லிருக்காருன்னா
 4. name + என்ன சொல்லிருக்காங்க (what they said). Example: ...என்ன சொல்லிருக்காங்கன்னா
-5. name + வந்திருக்காது (has not come)
+5. name + வந்திருக்காரு (has come)
 6. name + அப்படிங்கற/அப்படிங்கிற + நண்பர் + வந்து. Example: சிவகாசி விஜய் அப்படிங்கற நண்பர் வந்து
 7. name + என்ன சொல்லிருக்கான். Example: ...என்ன சொல்லிருக்கான்னா
 8. name + என்ன கேட்டுருந்தாரு (what he had asked). Example: ...என்ன கேட்டுருந்தாருன்னா

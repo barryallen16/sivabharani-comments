@@ -17,12 +17,12 @@ A commenter name appears in ONE of these cue patterns (name comes FIRST, cue fol
 Rules:
 - The cue word is நண்பர் (with ண). நம்பர் (with ம) means phone number - NEVER extract it.
 - Keep the WHOLE handle verbatim even if compound: brand+name, place+name, English words, initials, digits. Never truncate to one part.
-- english is the most likely original handle spelling, lowercase, no spaces. Same order as tamil, never empty when tamil is non-empty.
-- mentioned names (players, crew, co-host, the host சிவா himself) go in "mentioned", never in tamil/english.
+- english is the most likely original handle spelling, lowercase, no spaces. Same order as commenter_tamil, never empty when commenter_tamil is non-empty.
+- mentioned names (players, crew, co-host, the host சிவா himself) go in "mentioned", never in commenter_tamil/commenter_english.
 - REJECT: product terms (ஆட்டோமேட்டிக்கா, phone specs), greetings alone, verbs, common words (iphone, processor, bro, hello, guys).
 - If no name precedes a cue, return empty lists. Never copy names from these examples.
 - Output must be a valid JSON object. If no commenter name is found, return empty lists for all keys.
-Output Format: { "tamil": ["name1"], "english": ["name1"], "mentioned": [] }
+Output Format: { "commenter_tamil": ["name1"], "commenter_english": ["name1"], "mentioned": [] }
 
 INPUT: {{TEXT}}
 ```
@@ -31,20 +31,20 @@ INPUT: {{TEXT}}
 
 ```
 Input: வந்து பாத்தீங்கன்னா சிவகாசி விஜய் / அப்படிங்கற நண்பர் வந்து Samsung S25 எட்
-Output: {"tamil": ["சிவகாசி விஜய்"], "english": ["sivakasivijay"], "mentioned": []}
+Output: {"commenter_tamil": ["சிவகாசி விஜய்"], "commenter_english": ["sivakasivijay"], "mentioned": []}
 
 Input: கவின் என்ன சொல்லிருக்காருன்னா iPhone 16 / Pro வாங்கலாம்னு இருக்கேன் ப்ரோ
-Output: {"tamil": ["கவின்"], "english": ["kavin"], "mentioned": []}
+Output: {"commenter_tamil": ["கவின்"], "commenter_english": ["kavin"], "mentioned": []}
 
 Input: பாத்தீங்கன்னா டார்க் ஹன்டர் அப்படிங்கற / நண்பர் வந்து ஹாய் சிவான் கௌதம் ப்ரோ
-Output: {"tamil": ["டார்க் ஹன்டர்"], "english": ["darkhunter"], "mentioned": ["சிவான் கௌதம்"]}
+Output: {"commenter_tamil": ["டார்க் ஹன்டர்"], "commenter_english": ["darkhunter"], "mentioned": ["சிவான் கௌதம்"]}
 
 Input: சொல்லுங்க. உங்க போன் நம்பர் சொல்லுங்க
-Output: {"tamil": [], "english": [], "mentioned": []}
+Output: {"commenter_tamil": [], "commenter_english": [], "mentioned": []}
 
 Input: நரசிம்மா அப்படின்னு சொல்லி நம்ம குரூப்ல / ஒரு நண்பருடா குரூப் / ஆமா அவரு சொல்லிருக்காரு
-Output: {"tamil": ["நரசிம்மா"], "english": ["narasimha"], "mentioned": []}
+Output: {"commenter_tamil": ["நரசிம்மா"], "commenter_english": ["narasimha"], "mentioned": []}
 
 Input: விடைபெற்று கொள்வது சிவபரணி நிரஞ்சன் விக்னேஷ் பாக்கலாங்க பாய் பாய்
-Output: {"tamil": [], "english": [], "mentioned": []}
+Output: {"commenter_tamil": [], "commenter_english": [], "mentioned": []}
 ```

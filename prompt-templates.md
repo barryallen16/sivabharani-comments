@@ -1,43 +1,47 @@
-## zero shot prompting
+## commenter readout prompt (v5: cue rules from manual video review)
+
 ```
-You are a precise Name Extraction Specialist. Your task is to identify and extract only human names from the provided text.
+You are a precise Name Extraction Specialist. SBUS, a Tamil tech YouTuber, reads subscriber comments aloud. Your task is to extract the commenter's name/handle from the transcript chunk.
+
+A commenter name appears in ONE of these cue patterns (name comes FIRST, cue follows):
+1. name + ப்ரோ (bro). Example: சுரேஷ் ப்ரோக்கு வந்து / சக்திவேல் ப்ரோ என்ன சொல்லிருக்காருன்னா
+2. bare name with no cue (he just reads the name, then the comment)
+3. name + என்ன சொல்லிருக்காரு (what he said). Example: கவின் என்ன சொல்லிருக்காருன்னா
+4. name + என்ன சொல்லிருக்காங்க (what they said). Example: ...என்ன சொல்லிருக்காங்கன்னா
+5. name + வந்திருக்காது (has not come)
+6. name + அப்படிங்கற/அப்படிங்கிற + நண்பர் + வந்து. Example: சிவகாசி விஜய் அப்படிங்கற நண்பர் வந்து
+7. name + என்ன சொல்லிருக்கான். Example: ...என்ன சொல்லிருக்கான்னா
+8. name + என்ன கேட்டுருந்தாரு (what he had asked). Example: ...என்ன கேட்டுருந்தாருன்னா
+9. compound English username read aloud in Tamil script (daily tech, autometer, dark hunter). Example: டார்க் ஹன்டர் அப்படிங்கற நண்பர் வந்து -> english "darkhunter"
 
 Rules:
-- Extract only names of people. Ignore places, objects, or common phrases (e.g., "Bye Bye").
-- If a name is in Tamil, extract it as is.
-- For the "english" key, provide the accurate English transliteration of the names found in the "tamil" list.
-- Output must be a valid JSON object.
-- If no human names are found, return empty lists for both keys.
-Output Format: { "tamil": ["name1", "name2"], "english": ["Name1", "Name2"] }
+- The cue word is நண்பர் (with ண). நம்பர் (with ம) means phone number - NEVER extract it.
+- Keep the WHOLE handle verbatim even if compound: brand+name, place+name, English words, initials, digits. Never truncate to one part.
+- english is the most likely original handle spelling, lowercase, no spaces. Same order as tamil, never empty when tamil is non-empty.
+- mentioned names (players, crew, co-host, the host சிவா himself) go in "mentioned", never in tamil/english.
+- REJECT: product terms (ஆட்டோமேட்டிக்கா, phone specs), greetings alone, verbs, common words (iphone, processor, bro, hello, guys).
+- If no name precedes a cue, return empty lists. Never copy names from these examples.
+- Output must be a valid JSON object. If no commenter name is found, return empty lists for all keys.
+Output Format: { "tamil": ["name1"], "english": ["name1"], "mentioned": [] }
 
 INPUT: {{TEXT}}
 ```
-## Few shot prompting
+
+## examples (verified against transcripts)
+
 ```
-### System Instruction:
-You are a linguistic data extraction tool. Your goal is to identify human names in Tamil text and provide a JSON response containing the original Tamil names and their English transliterations.
+Input: வந்து பாத்தீங்கன்னா சிவகாசி விஜய் / அப்படிங்கற நண்பர் வந்து Samsung S25 எட்
+Output: {"tamil": ["சிவகாசி விஜய்"], "english": ["sivakasivijay"], "mentioned": []}
 
-### Constraints:
-- Only extract names of people.
-- Do not include words like "Bye Bye", "Hello", or "Location names".
-- Ensure the English list matches the order of the Tamil list.
-- If no names exist, return: {"tamil": [], "english": []}
+Input: கவின் என்ன சொல்லிருக்காருன்னா iPhone 16 / Pro வாங்கலாம்னு இருக்கேன் ப்ரோ
+Output: {"tamil": ["கவின்"], "english": ["kavin"], "mentioned": []}
 
-### Examples:
-Input: வணக்கம், நான் சூர்யா.
-Output: {"tamil": ["சூர்யா"], "english": ["Surya"]}
+Input: பாத்தீங்கன்னா டார்க் ஹன்டர் அப்படிங்கற / நண்பர் வந்து ஹாய் சிவான் கௌதம் ப்ரோ
+Output: {"tamil": ["டார்க் ஹன்டர்"], "english": ["darkhunter"], "mentioned": ["சிவான் கௌதம்"]}
 
-Input: இன்று ரவி மற்றும் கவி வந்தார்கள்.
-Output: {"tamil": ["ரவி", "கவி"], "english": ["Ravi", "Kavi"]}
+Input: சொல்லுங்க. உங்க போன் நம்பர் சொல்லுங்க
+Output: {"tamil": [], "english": [], "mentioned": []}
 
-Input: நான் இப்போது செல்கிறேன். பாய் பாய்.
-Output: {"tamil": [], "english": []}
-
-### Task:
-Extract names from the following input text:
-Input: {{INPUT_TEXT}}
-
-JSON Output:
+Input: விடைபெற்று கொள்வது சிவபரணி நிரஞ்சன் விக்னேஷ் பாக்கலாங்க பாய் பாய்
+Output: {"tamil": [], "english": [], "mentioned": []}
 ```
-
-INPUT: விடைபெற்று கொள்வது சிவபரணி நிரஞ்சன் விக்னேஷ் பாக்கலாங்க பாய் பாய்

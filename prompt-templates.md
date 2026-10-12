@@ -17,7 +17,8 @@ A commenter name appears in ONE of these cue patterns (name comes FIRST, cue fol
 Rules:
 - The cue word is நண்பர் (with ண). நம்பர் (with ம) means phone number - NEVER extract it.
 - Keep the WHOLE handle verbatim even if compound: brand+name, place+name, English words, initials, digits. Never truncate to one part.
-- english is the most likely original handle spelling, lowercase, no spaces. Same order as commenter_tamil, never empty when commenter_tamil is non-empty.
+- commenter_english is the most likely original handle spelling, lowercase, no spaces. Same order as commenter_tamil, never empty when commenter_tamil is non-empty.
+- Transliterate handles into English spelling; never translate the meaning into English words.
 - mentioned names (players, crew, co-host, the host சிவா himself) go in "mentioned", never in commenter_tamil/commenter_english.
 - REJECT: product terms (ஆட்டோமேட்டிக்கா, phone specs), greetings alone, verbs, common words (iphone, processor, bro, hello, guys).
 - If no name precedes a cue, return empty lists. Never copy names from these examples.

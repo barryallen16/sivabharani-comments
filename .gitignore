@@ -1,4 +1,21 @@
-.venv
+# Byte-compiled / optimized / cache files
+__pycache__
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.venv/
+
+# Local secrets & credentials
+.env
+keys.txt
+test_groq_models.py
+
+# Datasets (hosted on Hugging Face: barryallen16/sivabharani_comments)
+data/
+web/data.json
+
+# Archived experiments and temporary outputs
 shards/
+intermediate-results/
+processing_notebook/
+proxies/

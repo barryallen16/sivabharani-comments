@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SBUS Comment Finder | Sivabharani YouTube Search</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="fonts/pixelart-icons-font.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Hero Section -->
+    <header class="hero-section">
+      <div class="channel-badge">
+        <span class="pulse-dot"></span>
+        <span>Sivabharani YouTube Archive</span>
+        <span class="badge-divider">•</span>
+        <span class="badge-metric">15,155 Mentions</span>
+        <span class="badge-divider">•</span>
+        <span class="badge-metric">1,400+ Videos</span>
+      </div>
+      <h1 class="main-title">Find When Sivabharani Answered <span class="gradient-text">Your Comment</span></h1>
+      <p class="subtitle">Search your name or YouTube handle in English or தமிழ். Jump straight to the exact second where your question was answered.</p>
+      
+      <!-- Primary Search -->
+      <div class="search-wrapper">
+        <div class="search-bar">
+          <i class="pixelart-icons-font-search search-icon" aria-hidden="true"></i>
+          <input type="text" id="searchInput" placeholder="Search by your name or handle (e.g. Kavin, அரவிந்த் குமார், Dark Hunter)..." autofocus autocomplete="off" spellcheck="false">
+          <button id="clearBtn" class="clear-btn" title="Clear search" aria-label="Clear search">
+            <i class="pixelart-icons-font-close"></i>
+          </button>
+        </div>
+        <div class="sample-chips">
+          <span class="chip-label">Try searching:</span>
+          <button class="chip" data-query="Kavin">Kavin</button>
+          <button class="chip" data-query="Arvind Kumar">Arvind Kumar</button>
+          <button class="chip" data-query="சிவகாசி விஜய்">சிவகாசி விஜய்</button>
+          <button class="chip" data-query="Praveen">Praveen</button>
+          <button class="chip" data-query="Vignesh">Vignesh</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="statsBar">
+      <span id="resultCount">Ready to search across 15,155 comments (1,400+ videos)</span>
+      <span class="engine-badge">
+        <i class="pixelart-icons-font-zap"></i>
+        <span>Powered by Meilisearch</span>
+      </span>
+    </div>
+
+    <!-- Results Grid -->
+    <main class="results-container" id="resultsContainer">
+      <!-- Cards dynamically inserted here -->
+    </main>
+
+    <!-- Settings Modal Toggle -->
+    <footer class="app-footer">
+      <button id="openConfigBtn" class="config-link">
+        <i class="pixelart-icons-font-sliders"></i>
+        <span>Meilisearch Connection Settings</span>
+      </button>
+    </footer>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="configModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Meilisearch Settings</h3>
+        <button id="closeConfigBtn" class="close-modal-btn" aria-label="Close modal">
+          <i class="pixelart-icons-font-close"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label for="meiliHostInput">Meilisearch Host URL:</label>
+        <input type="text" id="meiliHostInput" value="https://adhi.isroot.in">
+
+        <label for="meiliKeyInput">Search API Key (or Master Key):</label>
+        <input type="password" id="meiliKeyInput" value="5e81db2e26ebe8b85982c0d883abbbc23aed0f3b4fd54ffd0e9eaa872fe6229e">
+
+        <label for="meiliIndexInput">Index Name:</label>
+        <input type="text" id="meiliIndexInput" value="sivabharani_comments">
+      </div>
+      <div class="modal-footer">
+        <button id="saveConfigBtn" class="save-btn">
+          <i class="pixelart-icons-font-save"></i>
+          <span>Save &amp; Reconnect</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

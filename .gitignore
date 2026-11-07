@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / cache files
+__pycache__
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+
+# Local secrets & credentials
+.env
+keys.txt
+test_groq_models.py
+
+# Non-web directories
+data/
+pipeline/
+transcripts/
+processing_notebook/
+shards/
+proxies/
+intermediate-results/
+misc/

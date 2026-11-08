@@ -1,1 +1,203 @@
-// SBUS Comment Finder - Meilisearch Client + Offline Archive Fallbackconst DEFAULT_CONFIG = {  host: localStorage.getItem("meili_host") || "https://adhi.isroot.in",  apiKey: localStorage.getItem("meili_key") || "5e81db2e26ebe8b85982c0d883abbbc23aed0f3b4fd54ffd0e9eaa872fe6229e",  index: localStorage.getItem("meili_index") || "sivabharani_comments"};let config = { ...DEFAULT_CONFIG };let debounceTimer = null;// DOM Elementsconst searchInput = document.getElementById("searchInput");const clearBtn = document.getElementById("clearBtn");const resultsContainer = document.getElementById("resultsContainer");const resultCount = document.getElementById("resultCount");const chips = document.querySelectorAll(".chip");const configModal = document.getElementById("configModal");const openConfigBtn = document.getElementById("openConfigBtn");const closeConfigBtn = document.getElementById("closeConfigBtn");const saveConfigBtn = document.getElementById("saveConfigBtn");const meiliHostInput = document.getElementById("meiliHostInput");const meiliKeyInput = document.getElementById("meiliKeyInput");const meiliIndexInput = document.getElementById("meiliIndexInput");// Initialize InputsmeiliHostInput.value = config.host;meiliKeyInput.value = config.apiKey;meiliIndexInput.value = config.index;// Search Functionasync function performSearch(query) {  query = (query || "").trim();  if (!query) {    clearBtn.style.display = "none";    resultCount.textContent = "Ready to search across 15,155 extracted comments (1,400 videos)";    resultsContainer.innerHTML = `      <div class="empty-state">        <div class="empty-icon"><i class="pixelart-icons-font-search"></i></div>        <h3>Search for your name or handle</h3>        <p>Try searching for names like "Kavin", "Goutham", "Arvind", or "??????? ?????"</p>      </div>    `;    return;  }  clearBtn.style.display = "flex";  resultCount.textContent = "Searching...";  try {    const controller = new AbortController();    const timeoutId = setTimeout(() => controller.abort(), 4000);    const url = `${config.host}/indexes/${config.index}/search`;    const res = await fetch(url, {      method: "POST",      headers: {        "Authorization": `Bearer ${config.apiKey}`,        "Content-Type": "application/json"      },      body: JSON.stringify({        q: query,        limit: 50,        attributesToHighlight: ["name_english", "name_tamil", "context_snippet"]      }),      signal: controller.signal    });    clearTimeout(timeoutId);    if (res.ok) {      const data = await res.json();      renderResults(data.hits, query);      return;    } else {      throw new Error(`Status ${res.status}`);    }  } catch (err) {    resultCount.innerHTML = `<span class="alert-status"><i class="pixelart-icons-font-square-alert"></i> Unable to reach search service at ${escapeHtml(config.host)}.</span>`;    resultsContainer.innerHTML = `      <div class="empty-state">        <div class="empty-icon"><i class="pixelart-icons-font-power"></i></div>        <h3>Search Service Unavailable</h3>        <p>Could not connect to Meilisearch. Check your connection or server settings below.</p>      </div>    `;  }}// Render Resultsfunction renderResults(hits, query, source) {  if (!hits || hits.length === 0) {    resultCount.textContent = `No comments found for "${query}"`;    resultsContainer.innerHTML = `      <div class="empty-state">        <div class="empty-icon"><i class="pixelart-icons-font-video"></i></div>        <h3>No matches found</h3>        <p>No video mentions found for "${escapeHtml(query)}". Try searching in Tamil or a different variation.</p>      </div>    `;    return;  }  const suffix = source ? ` [${source}]` : "";  resultCount.textContent = `Found ${hits.length} mention${hits.length > 1 ? "s" : ""} for "${query}"${suffix}`;  const fallbackThumb = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20180%22%20fill%3D%22%23fcffff%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%230593c6%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%2216%22%20fill%3D%22%23fcffff%22%3ESivabharani%20Archive%3C%2Ftext%3E%3C%2Fsvg%3E";  resultsContainer.innerHTML = hits.map(hit => {    const thumbUrl = `https://img.youtube.com/vi/${hit.video_id}/mqdefault.jpg`;    const formattedTime = hit.timestamp_formatted || "00:00";    const videoUrl = hit.video_url || `https://youtu.be/${hit.video_id}?t=${Math.floor(hit.timestamp_seconds || 0)}`;    return `      <article class="result-card">        <div class="card-thumb-wrapper">          <img class="card-thumb" src="${thumbUrl}" alt="YouTube Thumbnail" loading="lazy" onerror="this.onerror=null;this.src='${fallbackThumb}'">          <div class="timestamp-pill">            <i class="pixelart-icons-font-play"></i>            <span>${formattedTime}</span>          </div>        </div>        <div class="card-content">          <div class="subscriber-header">            <span class="name-english">${escapeHtml(hit.name_english || "")}</span>            <span class="name-tamil">${escapeHtml(hit.name_tamil || "")}</span>          </div>          <p class="context-quote">"${escapeHtml(hit.context_snippet || "")}"</p>          <a class="watch-btn" href="${videoUrl}" target="_blank" rel="noopener noreferrer">            <i class="pixelart-icons-font-play"></i>            <span>Jump to ${formattedTime} on YouTube</span>          </a>        </div>      </article>    `;  }).join("");}function escapeHtml(str) {  return String(str).replace(/[&<>"']/g, m => ({    "&": "&amp;",    "<": "&lt;",    ">": "&gt;",    '"': "&quot;",    "'": "&#039;"  }[m]));}// Event ListenerssearchInput.addEventListener("input", (e) => {  clearTimeout(debounceTimer);  debounceTimer = setTimeout(() => {    performSearch(e.target.value);  }, 180);});clearBtn.addEventListener("click", () => {  searchInput.value = "";  searchInput.focus();  performSearch("");});chips.forEach(chip => {  chip.addEventListener("click", () => {    const q = chip.getAttribute("data-query");    searchInput.value = q;    searchInput.focus();    performSearch(q);  });});// Settings ModalopenConfigBtn.addEventListener("click", () => {  configModal.style.display = "flex";});closeConfigBtn.addEventListener("click", () => {  configModal.style.display = "none";});saveConfigBtn.addEventListener("click", () => {  config.host = meiliHostInput.value.trim() || DEFAULT_CONFIG.host;  config.apiKey = meiliKeyInput.value.trim() || DEFAULT_CONFIG.apiKey;  config.index = meiliIndexInput.value.trim() || DEFAULT_CONFIG.index;  localStorage.setItem("meili_host", config.host);  localStorage.setItem("meili_key", config.apiKey);  localStorage.setItem("meili_index", config.index);  configModal.style.display = "none";  performSearch(searchInput.value);});configModal.addEventListener("click", (e) => {  if (e.target === configModal) {    configModal.style.display = "none";  }});// Initial Empty StateperformSearch("");
+// SBUS Comment Finder - Meilisearch Client + Offline Archive Fallback
+
+const DEFAULT_CONFIG = {
+  host: localStorage.getItem("meili_host") || "https://adhi.isroot.in",
+  apiKey: localStorage.getItem("meili_key") || "5e81db2e26ebe8b85982c0d883abbbc23aed0f3b4fd54ffd0e9eaa872fe6229e",
+  index: localStorage.getItem("meili_index") || "sivabharani_comments"
+};
+
+let config = { ...DEFAULT_CONFIG };
+let debounceTimer = null;
+
+// DOM Elements
+const searchInput = document.getElementById("searchInput");
+const clearBtn = document.getElementById("clearBtn");
+const resultsContainer = document.getElementById("resultsContainer");
+const resultCount = document.getElementById("resultCount");
+const chips = document.querySelectorAll(".chip");
+
+const configModal = document.getElementById("configModal");
+const openConfigBtn = document.getElementById("openConfigBtn");
+const closeConfigBtn = document.getElementById("closeConfigBtn");
+const saveConfigBtn = document.getElementById("saveConfigBtn");
+const meiliHostInput = document.getElementById("meiliHostInput");
+const meiliKeyInput = document.getElementById("meiliKeyInput");
+const meiliIndexInput = document.getElementById("meiliIndexInput");
+
+// Initialize Inputs
+meiliHostInput.value = config.host;
+meiliKeyInput.value = config.apiKey;
+meiliIndexInput.value = config.index;
+
+// Search Function
+async function performSearch(query) {
+  query = (query || "").trim();
+
+  if (!query) {
+    clearBtn.style.display = "none";
+    resultCount.textContent = "Ready to search across 15,155 extracted comments (1,400 videos)";
+    resultsContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon"><i class="pixelart-icons-font-search"></i></div>
+        <h3>Search for your name or handle</h3>
+        <p>Try searching for names like "Kavin", "Goutham", "Arvind", or "சிவகாசி விஜய்"</p>
+      </div>
+    `;
+    return;
+  }
+
+  clearBtn.style.display = "flex";
+  resultCount.textContent = "Searching...";
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+    const url = `${config.host}/indexes/${config.index}/search`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        q: query,
+        limit: 50,
+        attributesToHighlight: ["name_english", "name_tamil", "context_snippet"]
+      }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const data = await res.json();
+      renderResults(data.hits, query);
+      return;
+    } else {
+      throw new Error(`Status ${res.status}`);
+    }
+  } catch (err) {
+    resultCount.innerHTML = `<span class="alert-status"><i class="pixelart-icons-font-square-alert"></i> Unable to reach search service at ${escapeHtml(config.host)}.</span>`;
+    resultsContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon"><i class="pixelart-icons-font-power"></i></div>
+        <h3>Search Service Unavailable</h3>
+        <p>Could not connect to Meilisearch. Check your connection or server settings below.</p>
+      </div>
+    `;
+  }
+}
+
+// Render Results
+function renderResults(hits, query, source) {
+  if (!hits || hits.length === 0) {
+    resultCount.textContent = `No comments found for "${query}"`;
+    resultsContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon"><i class="pixelart-icons-font-video"></i></div>
+        <h3>No matches found</h3>
+        <p>No video mentions found for "${escapeHtml(query)}". Try searching in Tamil or a different variation.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const suffix = source ? ` [${source}]` : "";
+  resultCount.textContent = `Found ${hits.length} mention${hits.length > 1 ? "s" : ""} for "${query}"${suffix}`;
+
+  const fallbackThumb = "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20180%22%20fill%3D%22%23fcffff%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%230593c6%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-family%3D%22sans-serif%22%20font-size%3D%2216%22%20fill%3D%22%23fcffff%22%3ESivabharani%20Archive%3C%2Ftext%3E%3C%2Fsvg%3E";
+
+  resultsContainer.innerHTML = hits.map(hit => {
+    const thumbUrl = `https://img.youtube.com/vi/${hit.video_id}/mqdefault.jpg`;
+    const formattedTime = hit.timestamp_formatted || "00:00";
+    const videoUrl = hit.video_url || `https://youtu.be/${hit.video_id}?t=${Math.floor(hit.timestamp_seconds || 0)}`;
+
+    return `
+      <article class="result-card">
+        <div class="card-thumb-wrapper">
+          <img class="card-thumb" src="${thumbUrl}" alt="YouTube Thumbnail" loading="lazy" onerror="this.onerror=null;this.src='${fallbackThumb}'">
+          <div class="timestamp-pill">
+            <i class="pixelart-icons-font-play"></i>
+            <span>${formattedTime}</span>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="subscriber-header">
+            <span class="name-english">${escapeHtml(hit.name_english || "")}</span>
+            <span class="name-tamil">${escapeHtml(hit.name_tamil || "")}</span>
+          </div>
+          <p class="context-quote">"${escapeHtml(hit.context_snippet || "")}"</p>
+          <a class="watch-btn" href="${videoUrl}" target="_blank" rel="noopener noreferrer">
+            <i class="pixelart-icons-font-play"></i>
+            <span>Jump to ${formattedTime} on YouTube</span>
+          </a>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[m]));
+}
+
+// Event Listeners
+searchInput.addEventListener("input", (e) => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    performSearch(e.target.value);
+  }, 180);
+});
+
+clearBtn.addEventListener("click", () => {
+  searchInput.value = "";
+  searchInput.focus();
+  performSearch("");
+});
+
+chips.forEach(chip => {
+  chip.addEventListener("click", () => {
+    const q = chip.getAttribute("data-query");
+    searchInput.value = q;
+    searchInput.focus();
+    performSearch(q);
+  });
+});
+
+// Settings Modal
+openConfigBtn.addEventListener("click", () => {
+  configModal.style.display = "flex";
+});
+
+closeConfigBtn.addEventListener("click", () => {
+  configModal.style.display = "none";
+});
+
+saveConfigBtn.addEventListener("click", () => {
+  config.host = meiliHostInput.value.trim() || DEFAULT_CONFIG.host;
+  config.apiKey = meiliKeyInput.value.trim() || DEFAULT_CONFIG.apiKey;
+  config.index = meiliIndexInput.value.trim() || DEFAULT_CONFIG.index;
+
+  localStorage.setItem("meili_host", config.host);
+  localStorage.setItem("meili_key", config.apiKey);
+  localStorage.setItem("meili_index", config.index);
+
+  configModal.style.display = "none";
+  performSearch(searchInput.value);
+});
+
+configModal.addEventListener("click", (e) => {
+  if (e.target === configModal) {
+    configModal.style.display = "none";
+  }
+});
+
+// Initial Empty State
+performSearch("");
